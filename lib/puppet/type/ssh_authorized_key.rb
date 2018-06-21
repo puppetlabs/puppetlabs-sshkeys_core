@@ -46,11 +46,10 @@ module Puppet
         comment for each instance."
 
       isnamevar
-
     end
 
     newproperty(:type) do
-      desc "The encryption type used."
+      desc 'The encryption type used.'
 
       newvalues :'ssh-dss', :'ssh-rsa', :'ecdsa-sha2-nistp256', :'ecdsa-sha2-nistp384', :'ecdsa-sha2-nistp521', :'ssh-ed25519'
 
@@ -71,7 +70,7 @@ module Puppet
           the `name` attribute/resource title."
 
       validate do |value|
-        raise Puppet::Error, _("Key must not contain whitespace: %{value}") % { value: value } if value =~ /\s/
+        raise Puppet::Error, _('Key must not contain whitespace: %{value}') % { value: value } if value =~ %r{\s}
       end
     end
 
@@ -89,14 +88,14 @@ module Puppet
       defaultto :absent
 
       def should
-        return super if defined?(@should) and @should[0] != :absent
+        return super if defined?(@should) && @should[0] != :absent
 
         return nil unless user = resource[:user]
 
         begin
           return File.expand_path("~#{user}/.ssh/authorized_keys")
         rescue
-          Puppet.debug "The required user is not yet present on the system"
+          Puppet.debug 'The required user is not yet present on the system'
           return nil
         end
       end
@@ -106,14 +105,14 @@ module Puppet
       end
     end
 
-    newproperty(:options, :array_matching => :all) do
+    newproperty(:options, array_matching: :all) do
       desc "Key options; see sshd(8) for possible values. Multiple values
         should be specified as an array."
 
-      defaultto do :absent end
+      defaultto { :absent }
 
       validate do |value|
-        unless value == :absent or value =~ /^[-a-z0-9A-Z_]+(?:=\".*?\")?$/
+        unless value == :absent || value =~ %r{^[-a-z0-9A-Z_]+(?:=\".*?\")?$}
           raise Puppet::Error, _("Option %{value} is not valid. A single option must either be of the form 'option' or 'option=\"value\". Multiple options must be provided as an array") % { value: value }
         end
       end
@@ -135,7 +134,7 @@ module Puppet
     end
 
     # regular expression suitable for use by a ParsedFile based provider
-    REGEX = /^(?:(.+)\s+)?(ssh-dss|ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp256|ecdsa-sha2-nistp384|ecdsa-sha2-nistp521)\s+([^ ]+)\s*(.*)$/
+    REGEX = %r{^(?:(.+)\s+)?(ssh-dss|ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp256|ecdsa-sha2-nistp384|ecdsa-sha2-nistp521)\s+([^ ]+)\s*(.*)$}
     def self.keyline_regex
       REGEX
     end

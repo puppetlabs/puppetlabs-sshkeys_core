@@ -34,8 +34,8 @@ module PuppetSpec::Compiler
       catalog.resources.each { |res| yield res }
     end
     transaction = Puppet::Transaction.new(catalog,
-                                         Puppet::Transaction::Report.new,
-                                         prioritizer)
+                                          Puppet::Transaction::Report.new,
+                                          prioritizer)
     transaction.evaluate
     transaction.report.finalize_report
 
@@ -70,7 +70,7 @@ module PuppetSpec::Compiler
     collect_notices(code, node) do |compiler|
       unless topscope_vars.empty?
         scope = compiler.topscope
-        topscope_vars.each {|k,v| scope.setvar(k, v) }
+        topscope_vars.each { |k, v| scope.setvar(k, v) }
       end
       if block_given?
         compiler.compile do |catalog|
@@ -95,7 +95,7 @@ module PuppetSpec::Compiler
     compiler = Puppet::Parser::Compiler.new(node)
     unless variables.empty?
       scope = compiler.topscope
-      variables.each {|k,v| scope.setvar(k, v) }
+      variables.each { |k, v| scope.setvar(k, v) }
     end
 
     if source.nil?
@@ -105,7 +105,7 @@ module PuppetSpec::Compiler
     end
 
     # evaluate given source is the context of the compiled state and return its result
-    compiler.compile do |catalog |
+    compiler.compile do |_catalog|
       Puppet::Pops::Parser::EvaluatingParser.singleton.evaluate_string(compiler.topscope, source, source_location)
     end
   end

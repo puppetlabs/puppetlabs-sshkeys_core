@@ -1,43 +1,42 @@
-test_name "should update an entry for an SSH authorized key"
+test_name 'should update an entry for an SSH authorized key'
 
 tag 'audit:medium',
-    'audit:refactor',  # Use block style `test_run`
-    'audit:acceptance' # Could be done at the integration (or unit) layer though
-                       # actual changing of resources could irreparably damage a
-                       # host running this, or require special permissions.
+    'audit:refactor', # Use block style `test_run`
+    # Could be done at the integration (or unit) layer though
+    # actual changing of resources could irreparably damage a
+    # host running this, or require special permissions.
+    'audit:acceptance'
 
-confine :except, :platform => ['windows']
+confine :except, platform: ['windows']
 
 auth_keys = '~/.ssh/authorized_keys'
-name = "pl#{rand(999999).to_i}"
+name = "pl#{rand(999_999).to_i}"
 
 agents.each do |agent|
   teardown do
-    #(teardown) restore the #{auth_keys} file
-    on(agent, "mv /tmp/auth_keys #{auth_keys}", :acceptable_exit_codes => [0,1])
+    # (teardown) restore the #{auth_keys} file
+    on(agent, "mv /tmp/auth_keys #{auth_keys}", acceptable_exit_codes: [0, 1])
   end
 
   #------- SETUP -------#
   step "(setup) backup #{auth_keys} file"
-  on(agent, "cp #{auth_keys} /tmp/auth_keys", :acceptable_exit_codes => [0,1])
+  on(agent, "cp #{auth_keys} /tmp/auth_keys", acceptable_exit_codes: [0, 1])
 
   step "(setup) create an authorized key in the #{auth_keys} file"
   on(agent, "echo '' >> #{auth_keys} && echo 'ssh-rsa mykey #{name}' >> #{auth_keys}")
   on(agent, "chown $LOGNAME #{auth_keys}")
 
   #------- TESTS -------#
-  step "update an authorized key entry with puppet (present)"
+  step 'update an authorized key entry with puppet (present)'
   args = ['ensure=present',
-          "user=$LOGNAME",
+          'user=$LOGNAME',
           "type='rsa'",
-          "key='mynewshinykey'",
-         ]
-  on(agent, puppet_resource('ssh_authorized_key', "#{name}", args))
+          "key='mynewshinykey'"]
+  on(agent, puppet_resource('ssh_authorized_key', name.to_s, args))
 
   step "verify entry updated in #{auth_keys}"
-  on(agent, "cat #{auth_keys}")  do |res|
+  on(agent, "cat #{auth_keys}")  do |_res|
     fail_test "didn't find the updated key for #{name}" unless stdout.include? "mynewshinykey #{name}"
     fail_test "Found old key mykey #{name}" if stdout.include? "mykey #{name}"
   end
-
 end
