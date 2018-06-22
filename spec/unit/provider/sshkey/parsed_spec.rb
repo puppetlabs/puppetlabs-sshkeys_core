@@ -3,8 +3,8 @@ require 'spec_helper'
 describe 'sshkey parsed provider' do
   subject { provider }
 
-  let :type do Puppet::Type.type(:sshkey) end
-  let :provider do type.provider(:parsed) end
+  let(:type) { Puppet::Type.type(:sshkey) }
+  let(:provider) { type.provider(:parsed) }
 
   after :each do
     subject.clear
@@ -40,9 +40,9 @@ describe 'sshkey parsed provider' do
 
   context 'with the sample file' do
     ['sample', 'sample_with_blank_lines'].each do |sample_file|
-      let :fixture do my_fixture(sample_file) end
+      let(:fixture) { my_fixture(sample_file) }
 
-      before :each do subject.stubs(:default_target).returns(fixture) end
+      before(:each) { subject.stubs(:default_target).returns(fixture) }
 
       it 'parses to records on prefetch' do
         expect(subject.target_records(fixture)).to be_empty
