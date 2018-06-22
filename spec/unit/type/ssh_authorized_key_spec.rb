@@ -1,4 +1,3 @@
-#! /usr/bin/env ruby
 require 'spec_helper'
 
 describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microsoft_windows? do
