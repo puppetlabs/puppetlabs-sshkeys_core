@@ -27,12 +27,10 @@ Rakefile:
   requires:
     - puppet-lint/tasks/puppet-lint
 
-#.rubocop.yml:
-#  default_configs:
-#    Layout/IndentHeredoc:
-#      Enabled: false
-#    RSpec/NamedSubject:
-#      Enabled: false
+.rubocop.yml:
+  default_configs:
+    RSpec/NamedSubject:
+      Enabled: false
 
 .gitlab-ci.yml:
   delete: true
