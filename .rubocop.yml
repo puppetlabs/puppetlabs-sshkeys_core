@@ -74,6 +74,8 @@ Style/Documentation:
   Exclude:
   - lib/puppet/parser/functions/**/*
   - spec/**/*
+  - lib/puppet/type/**
+  - lib/puppet/provider/**
 Style/WordArray:
   EnforcedStyle: brackets
 Style/CollectionMethods:

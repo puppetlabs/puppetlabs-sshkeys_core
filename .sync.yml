@@ -31,6 +31,12 @@ Rakefile:
   default_configs:
     RSpec/NamedSubject:
       Enabled: false
+    Style/Documentation:
+      Exclude:
+        - lib/puppet/parser/functions/**/*
+        - spec/**/*
+        - lib/puppet/type/**
+        - lib/puppet/provider/**
 
 .gitlab-ci.yml:
   delete: true
