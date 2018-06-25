@@ -90,7 +90,7 @@ module PuppetSpec::Compiler
   # (Parameters given by name)
   #
   def evaluate(code: 'undef', source: nil, node: Puppet::Node.new('testnode'), variables: {})
-    source_location = caller[0]
+    source_location = caller(0..0).first
     Puppet[:code] = code
     compiler = Puppet::Parser::Compiler.new(node)
     unless variables.empty?
