@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'puppet/file_bucket/dipper'
 
-describe Puppet::Type.type(:ssh_authorized_key).provider(:parsed), '(integration)', unless: Puppet.features.microsoft_windows? do
+describe Puppet::Type.type(:ssh_authorized_key).provider(:parsed), unless: Puppet.features.microsoft_windows? do
   include PuppetSpec::Files
 
   let :fake_userfile do

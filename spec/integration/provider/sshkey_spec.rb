@@ -3,8 +3,7 @@ require 'puppet/file_bucket/dipper'
 require 'puppet_spec/files'
 require 'puppet_spec/compiler'
 
-describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
-         unless: Puppet.features.microsoft_windows? do
+describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.microsoft_windows? do
   include PuppetSpec::Files
   include PuppetSpec::Compiler
 
