@@ -85,7 +85,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
     aliases = {
       'dsa'     => 'ssh-dss',
       'ed25519' => 'ssh-ed25519',
-      'rsa'     => 'ssh-rsa'
+      'rsa'     => 'ssh-rsa',
     }
     types.each do |type|
       it "should update an entry with #{type} type" do
