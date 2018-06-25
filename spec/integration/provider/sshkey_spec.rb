@@ -8,6 +8,8 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
   include PuppetSpec::Files
   include PuppetSpec::Compiler
 
+  let(:sshkey_file) { tmpfile('sshkey_integration_specs') }
+
   before :each do
     # Don't backup to filebucket
     Puppet::FileBucket::Dipper.any_instance.stubs(:backup)
@@ -15,8 +17,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     described_class.stubs(:filetype)
                    .returns Puppet::Util::FileType::FileTypeFlat
 
-    @sshkey_file = tmpfile('sshkey_integration_specs')
-    FileUtils.cp(my_fixture('sample'), @sshkey_file)
+    FileUtils.cp(my_fixture('sample'), sshkey_file)
   end
 
   after :each do
@@ -44,18 +45,18 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
                     ensure => 'present',
                     type   => 'rsa',
                     key    => 'mykey',
-                    target => '#{@sshkey_file}' }"
+                    target => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
-      expect(File.read(@sshkey_file)).to match(%r{#{super_unique}.*mykey})
+      expect(File.read(sshkey_file)).to match(%r{#{super_unique}.*mykey})
     end
 
     let(:sshkey_name) { 'kirby.madstop.com' }
     it 'deletes an entry for an SSH host key' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
                     ensure => 'absent',
-                    target => '#{@sshkey_file}' }"
+                    target => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
-      expect(File.read(@sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
+      expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
     end
 
     it 'updates an entry for an SSH host key' do
@@ -63,10 +64,10 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
                     ensure => 'present',
                     type   => 'rsa',
                     key    => 'mynewshinykey',
-                    target => '#{@sshkey_file}' }"
+                    target => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
-      expect(File.read(@sshkey_file)).to match(%r{#{sshkey_name}.*mynewshinykey})
-      expect(File.read(@sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
+      expect(File.read(sshkey_file)).to match(%r{#{sshkey_name}.*mynewshinykey})
+      expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
     end
 
     # test all key types
@@ -87,15 +88,15 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
                       ensure => 'present',
                       type   => '#{type}',
                       key    => 'mynewshinykey',
-                      target => '#{@sshkey_file}' }"
+                      target => '#{sshkey_file}' }"
 
         apply_with_error_check(manifest)
         if aliases.key?(type)
           full_type = aliases[type]
-          expect(File.read(@sshkey_file))
+          expect(File.read(sshkey_file))
             .to match(%r{#{sshkey_name}.*#{full_type}.*mynew})
         else
-          expect(File.read(@sshkey_file))
+          expect(File.read(sshkey_file))
             .to match(%r{#{sshkey_name}.*#{type}.*mynew})
         end
       end
@@ -108,7 +109,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
                     ensure => 'present',
                     type   => '#{invalid_type}',
                     key    => 'mynewshinykey',
-                    target => '#{@sshkey_file}' }"
+                    target => '#{sshkey_file}' }"
       expect {
         apply_compiled_manifest(manifest)
       }.to raise_error(Puppet::ResourceError, %r{Invalid value "#{invalid_type}"})
@@ -120,10 +121,10 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
       manifest = "#{type_under_test} { '#{sshkey_name}':
                     ensure       => 'present',
                     host_aliases => '#{host_alias}',
-                    target       => '#{@sshkey_file}' }"
+                    target       => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
-      expect(File.read(@sshkey_file)).to match(%r{#{sshkey_name},#{host_alias}\s})
-      expect(File.read(@sshkey_file)).not_to match(%r{#{sshkey_name}\s})
+      expect(File.read(sshkey_file)).to match(%r{#{sshkey_name},#{host_alias}\s})
+      expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}\s})
     end
 
     # array host_alias
@@ -133,23 +134,23 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
       manifest = "#{type_under_test} { '#{sshkey_name}':
                     ensure       => 'present',
                     host_aliases => '#{host_alias}',
-                    target       => '#{@sshkey_file}' }"
+                    target       => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
-      expect(File.read(@sshkey_file)).to match(%r{#{sshkey_name},#{host_alias}\s})
-      expect(File.read(@sshkey_file)).not_to match(%r{#{sshkey_name}\s})
+      expect(File.read(sshkey_file)).to match(%r{#{sshkey_name},#{host_alias}\s})
+      expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}\s})
     end
 
     # puppet resource sshkey
     it 'fetches an entry from resources' do
-      @resource_app = Puppet::Application[:resource]
-      @resource_app.preinit
-      @resource_app.command_line.stubs(:args)
-                   .returns([type_under_test, sshkey_name, "target=#{@sshkey_file}"])
+      resource_app = Puppet::Application[:resource]
+      resource_app.preinit
+      resource_app.command_line.stubs(:args)
+                   .returns([type_under_test, sshkey_name, "target=#{sshkey_file}"])
 
-      @resource_app.expects(:puts).with do |args|
+      resource_app.expects(:puts).with do |args|
         expect(args).to match(%r{#{sshkey_name}})
       end
-      @resource_app.main
+      resource_app.main
     end
   end
 end
