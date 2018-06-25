@@ -28,7 +28,6 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
 
   describe 'when managing a ssh known hosts file it...' do
     let(:host_alias) { 'r0ckdata.com' }
-    let(:host_aliases) { 'r0ckdata.com,erict.net' }
     let(:invalid_type) { 'ssh-er0ck' }
     let(:sshkey_name) { 'kirby.madstop.com' }
     let(:super_unique) { 'my.super.unique.host' }
@@ -118,7 +117,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     end
 
     # single host_alias
-    it 'updates an entry with new host_alias' do
+    it 'updates an entry with a single new host_alias' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
                     ensure       => 'present',
                     host_aliases => '#{host_alias}',
@@ -129,14 +128,13 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     end
 
     # array host_alias
-
-    it 'updates an entry with new host_alias' do
+    it 'updates an entry with multiple new host_aliases' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
-                    ensure       => 'present',
-                    host_aliases => '#{host_alias}',
-                    target       => '#{sshkey_file}' }"
+      ensure       => 'present',
+      host_aliases => [ 'r0ckdata.com', 'erict.net' ],
+      target       => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
-      expect(File.read(sshkey_file)).to match(%r{#{sshkey_name},#{host_alias}\s})
+      expect(File.read(sshkey_file)).to match(%r{#{sshkey_name},r0ckdata\.com,erict\.net\s})
       expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}\s})
     end
 
