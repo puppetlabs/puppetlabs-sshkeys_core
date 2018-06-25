@@ -50,7 +50,7 @@ describe 'sshkey parsed provider' do
 
         records = subject.target_records(fixture)
         expect(records).to be_an Array
-        expect(records).to be_all { |x| expect(x).to be_an Hash }
+        expect(records).to(be_all { |x| expect(x).to be_an(Hash) })
       end
 
       it 'reconstitutes the file from records' do
