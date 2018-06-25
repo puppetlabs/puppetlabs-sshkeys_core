@@ -86,17 +86,23 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
     end
 
     describe 'for key' do
+      # rubocop:disable Metrics/LineLength
       it 'supports a valid key like a 1024 bit rsa key' do
         expect { described_class.new(name: 'whev', type: :rsa, user: 'nobody', key: 'AAAAB3NzaC1yc2EAAAADAQABAAAAgQDCPfzW2ry7XvMc6E5Kj2e5fF/YofhKEvsNMUogR3PGL/HCIcBlsEjKisrY0aYgD8Ikp7ZidpXLbz5dBsmPy8hJiBWs5px9ZQrB/EOQAwXljvj69EyhEoGawmxQMtYw+OAIKHLJYRuk1QiHAMHLp5piqem8ZCV2mLb9AsJ6f7zUVw==') }.not_to raise_error
       end
+      # rubocop:enable Metrics/LineLength
 
+      # rubocop:disable Metrics/LineLength
       it 'supports a valid key like a 4096 bit rsa key' do
-        expect { described_class.new(name: 'whev', type: :rsa, user: 'nobody', key: 'AAAAB3NzaC1yc2EAAAADAQABAAACAQDEY4pZFyzSfRc9wVWI3DfkgT/EL033UZm/7x1M+d+lBD00qcpkZ6CPT7lD3Z+vylQlJ5S8Wcw6C5Smt6okZWY2WXA9RCjNJMIHQbJAzwuQwgnwU/1VMy9YPp0tNVslg0sUUgpXb13WW4mYhwxyGmIVLJnUrjrQmIFhtfHsJAH8ZVqCWaxKgzUoC/YIu1u1ScH93lEdoBPLlwm6J0aiM7KWXRb7Oq1nEDZtug1zpX5lhgkQWrs0BwceqpUbY+n9sqeHU5e7DCyX/yEIzoPRW2fe2Gx1Iq6JKM/5NNlFfaW8rGxh3Z3S1NpzPHTRjw8js3IeGiV+OPFoaTtM1LsWgPDSBlzIdyTbSQR7gKh0qWYCNV/7qILEfa0yIFB5wIo4667iSPZw2pNgESVtenm8uXyoJdk8iWQ4mecdoposV/znknNb2GPgH+n/2vme4btZ0Sl1A6rev22GQjVgbWOn8zaDglJ2vgCN1UAwmq41RXprPxENGeLnWQppTnibhsngu0VFllZR5kvSIMlekLRSOFLFt92vfd+tk9hZIiKm9exxcbVCGGQPsf6dZ27rTOmg0xM2Sm4J6RRKuz79HQgA4Eg18+bqRP7j/itb89DmtXEtoZFAsEJw8IgIfeGGDtHTkfAlAC92mtK8byeaxGq57XCTKbO/r5gcOMElZHy1AcB8kw==') }.not_to raise_error
+        expect { described_class.new(name: 'whev', type: :rsa, user: 'nobody', key: 'AAAAB3NzaC1yc2EAAAADAQABAAACAQDEY4pZFyzSfRc9wVWI3DfkgT/EL033UZm/7x1M+d+lBD00qcpkZ6CPT7lD3Z+vylQlJ5S8Wcw6C5Smt6okZWY2WXA9RCjNJMIHQbJAzwuQwgnwU/1VMy9YPp0tNVslg0sUUgpXb13WW4mYhwxyGmIVLJnUrjrQmIFhtfHsJAH8ZVqCWaxKgzUoC/YIu1u1ScH93lEdoBPLlwm6J0aiM7KWXRb7Oq1nEDZtug1zpX5lhgkQWrs0BwceqpUbY+n9sqeHU5e7DCyX/yEIzoPRW2fe2Gx1Iq6JKM/5NNlFfaW8rGxh3Z3S1NpzPHTRjw8js3IeGiV+OPFoaTtM1LsWgPDSBlzIdyTbSQR7gKh0qWYCNV/7qILEfa0yIFB5wIo4667iSPZw2pNgESVtenm8uXyoJdk8iWQ4mecdoposV/znknNb2GPgH+n/2vme4btZ0Sl1A6rev22GQjVgbWOn8zaDglJ2vgCN1UAwmq41RXprPxENGeLnWQppTnibhsngu0VFllZR5kvSIMlekLRSOFLFt92vfd+tk9hZIiKm9exxcbVCGGQPsf6dZ27rTOmg0xM2Sm4J6RRKuz79HQgA4Eg18+bqRP7j/itb89DmtXEtoZFAsEJw8IgIfeGGDtHTkfAlAC92mtK8byeaxGq57XCTKbO/r5gcOMElZHy1AcB8kw==') }.not_to raise_error # rubocop:disable Metrics/LineLength
       end
+      # rubocop:enable Metrics/LineLength
 
+      # rubocop:disable Metrics/LineLength
       it 'supports a valid key like a 1024 bit dsa key' do
-        expect { described_class.new(name: 'whev', type: :dsa, user: 'nobody', key: 'AAAAB3NzaC1kc3MAAACBAI80iR78QCgpO4WabVqHHdEDigOjUEHwIjYHIubR/7u7DYrXY+e+TUmZ0CVGkiwB/0yLHK5dix3Y/bpj8ZiWCIhFeunnXccOdE4rq5sT2V3l1p6WP33RpyVYbLmeuHHl5VQ1CecMlca24nHhKpfh6TO/FIwkMjghHBfJIhXK+0w/AAAAFQDYzLupuMY5uz+GVrcP+Kgd8YqMmwAAAIB3SVN71whLWjFPNTqGyyIlMy50624UfNOaH4REwO+Of3wm/cE6eP8n75vzTwQGBpJX3BPaBGW1S1Zp/DpTOxhCSAwZzAwyf4WgW7YyAOdxN3EwTDJZeyiyjWMAOjW9/AOWt9gtKg0kqaylbMHD4kfiIhBzo31ZY81twUzAfN7angAAAIBfva8sTSDUGKsWWIXkdbVdvM4X14K4gFdy0ZJVzaVOtZ6alysW6UQypnsl6jfnbKvsZ0tFgvcX/CPyqNY/gMR9lyh/TCZ4XQcbqeqYPuceGehz+jL5vArfqsW2fJYFzgCcklmr/VxtP5h6J/T0c9YcDgc/xIfWdZAlznOnphI/FA==') }.not_to raise_error
+        expect { described_class.new(name: 'whev', type: :dsa, user: 'nobody', key: 'AAAAB3NzaC1kc3MAAACBAI80iR78QCgpO4WabVqHHdEDigOjUEHwIjYHIubR/7u7DYrXY+e+TUmZ0CVGkiwB/0yLHK5dix3Y/bpj8ZiWCIhFeunnXccOdE4rq5sT2V3l1p6WP33RpyVYbLmeuHHl5VQ1CecMlca24nHhKpfh6TO/FIwkMjghHBfJIhXK+0w/AAAAFQDYzLupuMY5uz+GVrcP+Kgd8YqMmwAAAIB3SVN71whLWjFPNTqGyyIlMy50624UfNOaH4REwO+Of3wm/cE6eP8n75vzTwQGBpJX3BPaBGW1S1Zp/DpTOxhCSAwZzAwyf4WgW7YyAOdxN3EwTDJZeyiyjWMAOjW9/AOWt9gtKg0kqaylbMHD4kfiIhBzo31ZY81twUzAfN7angAAAIBfva8sTSDUGKsWWIXkdbVdvM4X14K4gFdy0ZJVzaVOtZ6alysW6UQypnsl6jfnbKvsZ0tFgvcX/CPyqNY/gMR9lyh/TCZ4XQcbqeqYPuceGehz+jL5vArfqsW2fJYFzgCcklmr/VxtP5h6J/T0c9YcDgc/xIfWdZAlznOnphI/FA==') }.not_to raise_error # rubocop:disable Metrics/LineLength
       end
+      # rubocop:enable Metrics/LineLength
 
       it "doesn't support whitespaces" do
         expect { described_class.new(name: 'whev', type: :rsa, user: 'nobody', key: 'AAA FA==') }.to raise_error(Puppet::Error, %r{Key must not contain whitespace})
