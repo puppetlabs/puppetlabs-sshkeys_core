@@ -70,7 +70,7 @@ describe Puppet::Type.type(:ssh_authorized_key).provider(:parsed), unless: Puppe
   end
 
   def run_in_catalog(*resources)
-    Puppet::FileBucket::Dipper.any_instance.stubs(:backup) # Don't backup to the filebucket
+    Puppet::FileBucket::Dipper.any_instance.stubs(:backup) # rubocop:disable RSpec/AnyInstance
     catalog = Puppet::Resource::Catalog.new
     catalog.host_config = false
     resources.each do |resource|

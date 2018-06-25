@@ -12,7 +12,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
 
   before :each do
     # Don't backup to filebucket
-    Puppet::FileBucket::Dipper.any_instance.stubs(:backup)
+    Puppet::FileBucket::Dipper.any_instance.stubs(:backup) # rubocop:disable RSpec/AnyInstance
     # We don't want to execute anything
     described_class.stubs(:filetype)
                    .returns Puppet::Util::FileType::FileTypeFlat
