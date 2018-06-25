@@ -9,6 +9,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
   include PuppetSpec::Compiler
 
   let(:sshkey_file) { tmpfile('sshkey_integration_specs') }
+  let(:type_under_test) { 'sshkey' }
 
   before :each do
     # Don't backup to filebucket
@@ -25,10 +26,13 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     described_class.clear
   end
 
-  let(:type_under_test) { 'sshkey' }
-
   describe 'when managing a ssh known hosts file it...' do
+    let(:host_alias) { 'r0ckdata.com' }
+    let(:host_aliases) { 'r0ckdata.com,erict.net' }
+    let(:invalid_type) { 'ssh-er0ck' }
+    let(:sshkey_name) { 'kirby.madstop.com' }
     let(:super_unique) { 'my.super.unique.host' }
+
     it 'creates a new known_hosts file with mode 0644' do
       target   = tmpfile('ssh_known_hosts')
       manifest = "#{type_under_test} { '#{super_unique}':
@@ -50,7 +54,6 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
       expect(File.read(sshkey_file)).to match(%r{#{super_unique}.*mykey})
     end
 
-    let(:sshkey_name) { 'kirby.madstop.com' }
     it 'deletes an entry for an SSH host key' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
                     ensure => 'absent',
@@ -103,7 +106,6 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     end
 
     # test unknown key type fails
-    let(:invalid_type) { 'ssh-er0ck' }
     it 'raises an error with an unknown type' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
                     ensure => 'present',
@@ -116,7 +118,6 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     end
 
     # single host_alias
-    let(:host_alias) { 'r0ckdata.com' }
     it 'updates an entry with new host_alias' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
                     ensure       => 'present',
@@ -128,7 +129,6 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     end
 
     # array host_alias
-    let(:host_aliases) { 'r0ckdata.com,erict.net' }
 
     it 'updates an entry with new host_alias' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
