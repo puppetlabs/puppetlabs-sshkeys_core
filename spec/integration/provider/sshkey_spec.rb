@@ -98,11 +98,9 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
         apply_with_error_check(manifest)
         if aliases.key?(type)
           full_type = aliases[type]
-          expect(File.read(sshkey_file))
-          .to match(%r{#{sshkey_name}.*#{full_type}.*mynew})
+          expect(File.read(sshkey_file)).to match(%r{#{sshkey_name}.*#{full_type}.*mynew})
         else
-          expect(File.read(sshkey_file))
-          .to match(%r{#{sshkey_name}.*#{type}.*mynew})
+          expect(File.read(sshkey_file)).to match(%r{#{sshkey_name}.*#{type}.*mynew})
         end
       end
     end
@@ -145,8 +143,9 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
     it 'fetches an entry from resources' do
       resource_app = Puppet::Application[:resource]
       resource_app.preinit
-      resource_app.command_line.stubs(:args)
-                .returns([type_under_test, sshkey_name, "target=#{sshkey_file}"])
+      resource_app.command_line
+                  .stubs(:args)
+                  .returns([type_under_test, sshkey_name, "target=#{sshkey_file}"])
 
       resource_app.expects(:puts).with do |args|
         expect(args).to match(%r{#{sshkey_name}})
