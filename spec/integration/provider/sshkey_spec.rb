@@ -35,71 +35,75 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     it 'creates a new known_hosts file with mode 0644' do
       target   = tmpfile('ssh_known_hosts')
       manifest = "#{type_under_test} { '#{super_unique}':
-                    ensure => 'present',
-                    type   => 'rsa',
-                    key    => 'TESTKEY',
-                    target => '#{target}' }"
+      ensure => 'present',
+      type   => 'rsa',
+      key    => 'TESTKEY',
+      target => '#{target}' }"
       apply_with_error_check(manifest)
       expect_file_mode(target, '644')
     end
 
     it 'creates an SSH host key entry (ensure present)' do
       manifest = "#{type_under_test} { '#{super_unique}':
-                    ensure => 'present',
-                    type   => 'rsa',
-                    key    => 'mykey',
-                    target => '#{sshkey_file}' }"
+      ensure => 'present',
+      type   => 'rsa',
+      key    => 'mykey',
+      target => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
       expect(File.read(sshkey_file)).to match(%r{#{super_unique}.*mykey})
     end
 
     it 'deletes an entry for an SSH host key' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
-                    ensure => 'absent',
-                    target => '#{sshkey_file}' }"
+      ensure => 'absent',
+      target => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
       expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
     end
 
     it 'updates an entry for an SSH host key' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
-                    ensure => 'present',
-                    type   => 'rsa',
-                    key    => 'mynewshinykey',
-                    target => '#{sshkey_file}' }"
+      ensure => 'present',
+      type   => 'rsa',
+      key    => 'mynewshinykey',
+      target => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
       expect(File.read(sshkey_file)).to match(%r{#{sshkey_name}.*mynewshinykey})
       expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
     end
 
     # test all key types
-    types = ['ssh-dss',     'dsa',
-             'ssh-ed25519', 'ed25519',
-             'ssh-rsa',     'rsa',
-             'ecdsa-sha2-nistp256',
-             'ecdsa-sha2-nistp384',
-             'ecdsa-sha2-nistp521']
+    types = [
+      'ssh-dss',     'dsa',
+      'ssh-ed25519', 'ed25519',
+      'ssh-rsa',     'rsa',
+      'ecdsa-sha2-nistp256',
+      'ecdsa-sha2-nistp384',
+      'ecdsa-sha2-nistp521'
+    ]
     # these types are treated as aliases for sshkey <ahem> type
     #   so they are populated as the *values* below
-    aliases = { 'dsa' => 'ssh-dss',
-                'ed25519' => 'ssh-ed25519',
-                'rsa'     => 'ssh-rsa' }
+    aliases = {
+      'dsa'     => 'ssh-dss',
+      'ed25519' => 'ssh-ed25519',
+      'rsa'     => 'ssh-rsa'
+    }
     types.each do |type|
       it "should update an entry with #{type} type" do
         manifest = "#{type_under_test} { '#{sshkey_name}':
-                      ensure => 'present',
-                      type   => '#{type}',
-                      key    => 'mynewshinykey',
-                      target => '#{sshkey_file}' }"
+        ensure => 'present',
+        type   => '#{type}',
+        key    => 'mynewshinykey',
+        target => '#{sshkey_file}' }"
 
         apply_with_error_check(manifest)
         if aliases.key?(type)
           full_type = aliases[type]
           expect(File.read(sshkey_file))
-            .to match(%r{#{sshkey_name}.*#{full_type}.*mynew})
+          .to match(%r{#{sshkey_name}.*#{full_type}.*mynew})
         else
           expect(File.read(sshkey_file))
-            .to match(%r{#{sshkey_name}.*#{type}.*mynew})
+          .to match(%r{#{sshkey_name}.*#{type}.*mynew})
         end
       end
     end
@@ -107,10 +111,10 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     # test unknown key type fails
     it 'raises an error with an unknown type' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
-                    ensure => 'present',
-                    type   => '#{invalid_type}',
-                    key    => 'mynewshinykey',
-                    target => '#{sshkey_file}' }"
+      ensure => 'present',
+      type   => '#{invalid_type}',
+      key    => 'mynewshinykey',
+      target => '#{sshkey_file}' }"
       expect {
         apply_compiled_manifest(manifest)
       }.to raise_error(Puppet::ResourceError, %r{Invalid value "#{invalid_type}"})
@@ -119,9 +123,9 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
     # single host_alias
     it 'updates an entry with a single new host_alias' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
-                    ensure       => 'present',
-                    host_aliases => '#{host_alias}',
-                    target       => '#{sshkey_file}' }"
+      ensure       => 'present',
+      host_aliases => '#{host_alias}',
+      target       => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
       expect(File.read(sshkey_file)).to match(%r{#{sshkey_name},#{host_alias}\s})
       expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}\s})
@@ -143,7 +147,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), '(integration)',
       resource_app = Puppet::Application[:resource]
       resource_app.preinit
       resource_app.command_line.stubs(:args)
-                   .returns([type_under_test, sshkey_name, "target=#{sshkey_file}"])
+                .returns([type_under_test, sshkey_name, "target=#{sshkey_file}"])
 
       resource_app.expects(:puts).with do |args|
         expect(args).to match(%r{#{sshkey_name}})
