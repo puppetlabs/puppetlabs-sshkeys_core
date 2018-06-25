@@ -76,12 +76,13 @@ Puppet::Type.type(:ssh_authorized_key).provide(
     until scanner.eos?
       scanner.skip(%r{[ \t]*})
       # scan a long option
-      if (out = scanner.scan(%r{[-a-z0-9A-Z_]+=\".*?[^\\]\"})) || (out = scanner.scan(%r{[-a-z0-9A-Z_]+}))
-        result << out
-      else
-        # found an unscannable token, let's abort
-        break
-      end
+      out = scanner.scan(%r{[-a-z0-9A-Z_]+=\".*?[^\\]\"}) || scanner.scan(%r{[-a-z0-9A-Z_]+})
+
+      # found an unscannable token, let's abort
+      break unless out
+
+      result << out
+
       # eat a comma
       scanner.skip(%r{[ \t]*,[ \t]*})
     end
