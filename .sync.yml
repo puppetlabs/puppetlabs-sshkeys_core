@@ -40,3 +40,8 @@ Rakefile:
 
 .gitlab-ci.yml:
   delete: true
+
+.travis.yml:
+  remove_includes:
+    - env: PUPPET_GEM_VERSION="~> 4.0" CHECK=parallel_spec
+      rvm: 2.1.9
