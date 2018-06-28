@@ -1,35 +1,28 @@
-test_name 'should be able to find an existing SSH authorized key'
+require 'spec_helper_acceptance'
 
-tag 'audit:medium',
-    'audit:refactor', # Use block style `test_run`
-    # Could be done at the integration (or unit) layer though
-    # actual changing of resources could irreparably damage a
-    # host running this, or require special permissions.
-    'audit:acceptance'
+RSpec.context 'ssh_authorized_key: Query' do
+  let(:auth_keys) { '~/.ssh/authorized_keys' }
+  let(:name) { "pl#{rand(999_999).to_i}" }
 
-skip_test('This test is blocked by PUP-1605')
-
-confine :except, platform: ['windows']
-
-auth_keys = '~/.ssh/authorized_keys'
-name = "pl#{rand(999_999).to_i}"
-
-agents.each do |agent|
-  teardown do
-    # (teardown) restore the #{auth_keys} file
-    on(agent, "mv /tmp/auth_keys #{auth_keys}", acceptable_exit_codes: [0, 1])
+  before do
+    posix_agents.each do |agent|
+      on(agent, "cp #{auth_keys} /tmp/auth_keys", acceptable_exit_codes: [0, 1])
+      on(agent, "echo '' >> #{auth_keys} && echo 'ssh-rsa mykey #{name}' >> #{auth_keys}")
+    end
   end
 
-  #------- SETUP -------#
-  step "(setup) backup #{auth_keys} file"
-  on(agent, "cp #{auth_keys} /tmp/auth_keys", acceptable_exit_codes: [0, 1])
+  after do
+    posix_agents.each do |agent|
+      # (teardown) restore the #{auth_keys} file
+      on(agent, "mv /tmp/auth_keys #{auth_keys}", acceptable_exit_codes: [0, 1])
+    end
+  end
 
-  step "(setup) create an authorized key in the #{auth_keys} file"
-  on(agent, "echo '' >> #{auth_keys} && echo 'ssh-rsa mykey #{name}' >> #{auth_keys}")
-
-  #------- TESTS -------#
-  step 'verify SSH authorized key query with puppet'
-  on(agent, puppet_resource('ssh_authorized_key', "/#{name}")) do |_res|
-    fail_test "Didn't find the ssh_authorized_key for #{name}" unless stdout.include? name.to_s
+  posix_agents.each do |agent|
+    it "#{agent} should be able to find an existing SSH authorized key", pending: 'Blocked by PUP-1605' do
+      on(agent, puppet_resource('ssh_authorized_key', "/#{name}")) do |_res|
+        expect(stdout).to include(name.to_s)
+      end
+    end
   end
 end
