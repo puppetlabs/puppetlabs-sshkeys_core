@@ -2,44 +2,44 @@ require 'puppet/provider/parsedfile'
 
 Puppet::Type.type(:ssh_authorized_key).provide(
   :parsed,
-  :parent         => Puppet::Provider::ParsedFile,
-  :filetype       => :flat,
-  :default_target => ''
+  parent: Puppet::Provider::ParsedFile,
+  filetype: :flat,
+  default_target: '',
 ) do
-  desc "Parse and generate authorized_keys files for SSH."
+  desc 'Parse and generate authorized_keys files for SSH.'
 
-  text_line :comment, :match => /^\s*#/
-  text_line :blank, :match => /^\s*$/
+  text_line :comment, match: %r{^\s*#}
+  text_line :blank, match: %r{^\s*$}
 
   record_line :parsed,
-    :fields   => %w{options type key name},
-    :optional => %w{options},
-    :rts => /^\s+/,
-    :match    => Puppet::Type.type(:ssh_authorized_key).keyline_regex,
-    :post_parse => proc { |h|
-      h[:name] = "" if h[:name] == :absent
-      h[:options] ||= [:absent]
-      h[:options] = Puppet::Type::Ssh_authorized_key::ProviderParsed.parse_options(h[:options]) if h[:options].is_a? String
-    },
-    :pre_gen => proc { |h|
-      # if this name was generated, don't write it back to disk
-      h[:name] = "" if h[:unnamed]
-      h[:options] = [] if h[:options].include?(:absent)
-      h[:options] = h[:options].join(',')
-    }
+              fields: ['options', 'type', 'key', 'name'],
+              optional: ['options'],
+              rts: %r{^\s+},
+              match: Puppet::Type.type(:ssh_authorized_key).keyline_regex,
+              post_parse: proc { |h|
+                h[:name] = '' if h[:name] == :absent
+                h[:options] ||= [:absent]
+                h[:options] = Puppet::Type::Ssh_authorized_key::ProviderParsed.parse_options(h[:options]) if h[:options].is_a? String
+              },
+              pre_gen: proc { |h|
+                # if this name was generated, don't write it back to disk
+                h[:name] = '' if h[:unnamed]
+                h[:options] = [] if h[:options].include?(:absent)
+                h[:options] = h[:options].join(',')
+              }
 
   record_line :key_v1,
-    :fields   => %w{options bits exponent modulus name},
-    :optional => %w{options},
-    :rts      => /^\s+/,
-    :match    => /^(?:(.+) )?(\d+) (\d+) (\d+)(?: (.+))?$/
+              fields: ['options', 'bits', 'exponent', 'modulus', 'name'],
+              optional: ['options'],
+              rts: %r{^\s+},
+              match: %r{^(?:(.+) )?(\d+) (\d+) (\d+)(?: (.+))?$}
 
   def dir_perm
-    0700
+    0o700
   end
 
   def file_perm
-    0600
+    0o600
   end
 
   def user
@@ -48,7 +48,7 @@ Puppet::Type.type(:ssh_authorized_key).provide(
   end
 
   def flush
-    raise Puppet::Error, "Cannot write SSH authorized keys without user"    unless @resource.should(:user)
+    raise Puppet::Error, 'Cannot write SSH authorized keys without user'    unless @resource.should(:user)
     raise Puppet::Error, "User '#{@resource.should(:user)}' does not exist" unless Puppet::Util.uid(@resource.should(:user))
     # ParsedFile usually calls backup_target much later in the flush process,
     # but our SUID makes that fail to open filebucket files for writing.
@@ -57,14 +57,14 @@ Puppet::Type.type(:ssh_authorized_key).provide(
     self.class.backup_target(target)
 
     Puppet::Util::SUIDManager.asuser(@resource.should(:user)) do
-        unless Puppet::FileSystem.exist?(dir = File.dirname(target))
-          Puppet.debug "Creating #{dir} as #{@resource.should(:user)}"
-          Dir.mkdir(dir, dir_perm)
-        end
+      unless Puppet::FileSystem.exist?(dir = File.dirname(target))
+        Puppet.debug "Creating #{dir} as #{@resource.should(:user)}"
+        Dir.mkdir(dir, dir_perm)
+      end
 
-        super
+      super
 
-        File.chmod(file_perm, target)
+      File.chmod(file_perm, target)
     end
   end
 
@@ -73,17 +73,18 @@ Puppet::Type.type(:ssh_authorized_key).provide(
   def self.parse_options(options)
     result = []
     scanner = StringScanner.new(options)
-    while !scanner.eos?
-      scanner.skip(/[ \t]*/)
+    until scanner.eos?
+      scanner.skip(%r{[ \t]*})
       # scan a long option
-      if out = scanner.scan(/[-a-z0-9A-Z_]+=\".*?[^\\]\"/) or out = scanner.scan(/[-a-z0-9A-Z_]+/)
-        result << out
-      else
-        # found an unscannable token, let's abort
-        break
-      end
+      out = scanner.scan(%r{[-a-z0-9A-Z_]+=\".*?[^\\]\"}) || scanner.scan(%r{[-a-z0-9A-Z_]+})
+
+      # found an unscannable token, let's abort
+      break unless out
+
+      result << out
+
       # eat a comma
-      scanner.skip(/[ \t]*,[ \t]*/)
+      scanner.skip(%r{[ \t]*,[ \t]*})
     end
     result
   end
@@ -91,15 +92,13 @@ Puppet::Type.type(:ssh_authorized_key).provide(
   def self.prefetch_hook(records)
     name_index = 0
     records.each do |record|
-      if record[:record_type] == :parsed && record[:name].empty?
-        record[:unnamed] = true
-        # Generate a unique ID for unnamed keys, in case they need purging.
-        # If you change this, you have to keep
-        # Puppet::Type::User#unknown_keys_in_file in sync! (PUP-3357)
-        record[:name] = "#{record[:target]}:unnamed-#{ name_index += 1 }"
-        Puppet.debug("generating name for on-disk ssh_authorized_key #{record[:key]}: #{record[:name]}")
-      end
+      next unless record[:record_type] == :parsed && record[:name].empty?
+      record[:unnamed] = true
+      # Generate a unique ID for unnamed keys, in case they need purging.
+      # If you change this, you have to keep
+      # Puppet::Type::User#unknown_keys_in_file in sync! (PUP-3357)
+      record[:name] = "#{record[:target]}:unnamed-#{name_index += 1}"
+      Puppet.debug("generating name for on-disk ssh_authorized_key #{record[:key]}: #{record[:name]}")
     end
   end
 end
-

@@ -66,11 +66,16 @@ Style/TrailingCommaInLiteral:
 Style/SymbolArray:
   Description: Using percent style obscures symbolic intent of array's contents.
   EnforcedStyle: brackets
-RSpec/MessageSpies:
-  EnforcedStyle: receive
+RSpec/NamedSubject:
+  Enabled: false
 Style/Documentation:
   Exclude:
   - lib/puppet/parser/functions/**/*
+  - spec/**/*
+  - lib/puppet/type/**
+  - lib/puppet/provider/**
+RSpec/MessageSpies:
+  EnforcedStyle: receive
 Style/WordArray:
   EnforcedStyle: brackets
 Style/CollectionMethods:
@@ -80,6 +85,8 @@ Style/MethodCalledOnDoEndBlock:
 Style/StringMethods:
   Enabled: true
 Layout/EndOfLine:
+  Enabled: false
+Layout/IndentHeredoc:
   Enabled: false
 Metrics/AbcSize:
   Enabled: false

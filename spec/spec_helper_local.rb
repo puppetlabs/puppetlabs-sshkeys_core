@@ -8,7 +8,7 @@ end
 require 'puppet_spec/files'
 
 RSpec.configure do |config|
-  config.before :each do |test|
+  config.before :each do |_test|
     base = PuppetSpec::Files.tmpdir('tmp_settings')
     Puppet[:vardir] = File.join(base, 'var')
 

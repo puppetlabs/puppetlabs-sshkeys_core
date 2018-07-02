@@ -9,7 +9,7 @@ module Puppet
     ensurable
 
     newproperty(:type) do
-      desc "The encryption type used.  Probably ssh-dss or ssh-rsa."
+      desc 'The encryption type used.  Probably ssh-dss or ssh-rsa.'
 
       newvalues :'ssh-dss', :'ssh-ed25519', :'ssh-rsa', :'ecdsa-sha2-nistp256', :'ecdsa-sha2-nistp384', :'ecdsa-sha2-nistp521'
 
@@ -30,7 +30,7 @@ module Puppet
           the `name` attribute/resource title."
     end
 
-    # FIXME This should automagically check for aliases to the hosts, just
+    # FIXME: This should automagically check for aliases to the hosts, just
     # to see if we can automatically glean any aliases.
     newproperty(:host_aliases) do
       desc 'Any aliases the host might have.  Multiple values must be
@@ -41,6 +41,7 @@ module Puppet
       def insync?(is)
         is == @should
       end
+
       # We actually want to return the whole array here, not just the first
       # value.
       def should
@@ -48,23 +49,23 @@ module Puppet
       end
 
       validate do |value|
-        if value =~ /\s/
-          raise Puppet::Error, _("Aliases cannot include whitespace")
+        if value =~ %r{\s}
+          raise Puppet::Error, _('Aliases cannot include whitespace')
         end
-        if value =~ /,/
-          raise Puppet::Error, _("Aliases must be provided as an array, not a comma-separated list")
+        if value =~ %r{,}
+          raise Puppet::Error, _('Aliases must be provided as an array, not a comma-separated list')
         end
       end
     end
 
     newparam(:name) do
-      desc "The host name that the key is associated with."
+      desc 'The host name that the key is associated with.'
 
       isnamevar
 
       validate do |value|
-        raise Puppet::Error, _("Resourcename cannot include whitespaces") if value =~ /\s/
-        raise Puppet::Error, _("No comma in resourcename allowed. If you want to specify aliases use the host_aliases property") if value.include?(',')
+        raise Puppet::Error, _('Resourcename cannot include whitespaces') if value =~ %r{\s}
+        raise Puppet::Error, _('No comma in resourcename allowed. If you want to specify aliases use the host_aliases property') if value.include?(',')
       end
     end
 
@@ -72,12 +73,13 @@ module Puppet
       desc "The file in which to store the ssh key.  Only used by
         the `parsed` provider."
 
-      defaultto { if @resource.class.defaultprovider.ancestors.include?(Puppet::Provider::ParsedFile)
-        @resource.class.defaultprovider.default_target
+      defaultto do
+        if @resource.class.defaultprovider.ancestors.include?(Puppet::Provider::ParsedFile)
+          @resource.class.defaultprovider.default_target
         else
           nil
         end
-      }
+      end
     end
   end
 end
