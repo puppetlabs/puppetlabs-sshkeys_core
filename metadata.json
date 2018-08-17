@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-sshkeys_core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Puppet Labs",
   "summary": "Manage SSH authorized keys, and known hosts.",
   "license": "Apache-2.0",
