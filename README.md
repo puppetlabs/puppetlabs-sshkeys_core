@@ -14,7 +14,7 @@ Manage SSH `authorized_keys`, and `ssh_known_hosts` files.
 
 ## Usage
 
-To manage an authorized key for a user:
+To manage an authorized key for a user, use the following code:
 
 ```
 ssh_authorized_key { 'nick@magpie.example.com':
@@ -25,7 +25,7 @@ ssh_authorized_key { 'nick@magpie.example.com':
 }
 ```
 
-To manage a known hosts file entry:
+To manage a known hosts file entry, use the following code:
 
 ```
 sshkey { 'github.com':
@@ -35,7 +35,7 @@ sshkey { 'github.com':
 }
 ```
 
-More details cana be found in the `REFERENCE.md` file.
+More details can be found in the `REFERENCE.md` file.
 
 ## Reference
 
@@ -45,7 +45,7 @@ This module is documented using Puppet Strings.
 
 For a quick primer on how Strings works, please see [this blog post](https://puppet.com/blog/using-puppet-strings-generate-great-documentation-puppet-modules) or the [README.md](https://github.com/puppetlabs/puppet-strings/blob/master/README.md) for Puppet Strings.
 
-To generate documentation locally, run
+To generate documentation locally, run the following command:
 ```
 bundle install
 bundle exec puppet strings generate ./lib/**/*.rb
