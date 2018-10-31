@@ -6,11 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: puppetlabs-sshkeys_core 1.0.0-8-g39a613b\n"
-"\n"
+"Project-Id-Version: puppetlabs-sshkeys_core \n"
 "Report-Msgid-Bugs-To: docs@puppet.com\n"
-"POT-Creation-Date: 2018-08-17 15:12-0700\n"
-"PO-Revision-Date: 2018-08-17 15:12-0700\n"
+"POT-Creation-Date: 2018-10-31 16:52+0000\n"
+"PO-Revision-Date: 2018-10-31 16:52+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -24,7 +23,7 @@ msgid "Key must not contain whitespace: %{value}"
 msgstr ""
 
 #: ../lib/puppet/type/ssh_authorized_key.rb:118
-msgid "Option %{value} is not valid. A single option must either be of the form 'option' or 'option=\"value\". Multiple options must be provided as an array"
+msgid "Option %{value} is not valid. A single option must either be of the form 'option' or 'option=\"value\"'. Multiple options must be provided as an array"
 msgstr ""
 
 #: ../lib/puppet/type/ssh_authorized_key.rb:136
