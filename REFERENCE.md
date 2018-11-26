@@ -92,7 +92,17 @@ Default value: absent
 ##### `options`
 
 Key options; see sshd(8) for possible values. Multiple values
-should be specified as an array.
+should be specified as an array. For example, you could use the
+following to install a SSH CA that allows someone with the
+'superuser' principal to log in as root
+
+    ssh_authorized_key { 'Company SSH CA':
+      ensure  => present,
+      user    => 'root',
+      type    => 'ssh-ed25519',
+      key     => 'AAAAC3NzaC[...]CeA5kG',
+      options => [ 'cert-authority', 'principals="superuser"' ],
+    }
 
 #### Parameters
 
