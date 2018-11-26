@@ -35,11 +35,9 @@ sshkey { 'github.com':
 }
 ```
 
-More details can be found in the `REFERENCE.md` file.
-
 ## Reference
 
-Please see `REFERENCE.md` for the reference documentation.
+Please see [`REFERENCE.md`](REFERENCE.md) for the reference documentation.
 
 This module is documented using Puppet Strings.
 
