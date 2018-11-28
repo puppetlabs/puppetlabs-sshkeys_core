@@ -29,12 +29,16 @@ module PuppetSpec::Compiler
   end
 
   def apply_compiled_manifest(manifest, prioritizer = Puppet::Graph::SequentialPrioritizer.new)
+    args = []
+    if Puppet.version.to_f < 5.0
+      args << 'apply'
+    end
     catalog = compile_to_ral(manifest)
     if block_given?
       catalog.resources.each { |res| yield res }
     end
     transaction = Puppet::Transaction.new(catalog,
-                                          Puppet::Transaction::Report.new,
+                                          Puppet::Transaction::Report.new(*args),
                                           prioritizer)
     transaction.evaluate
     transaction.report.finalize_report
