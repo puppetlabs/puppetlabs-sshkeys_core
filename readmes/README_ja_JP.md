@@ -36,13 +36,10 @@ sshkey { 'github.com':
   key    => 'AAAAB3Nza[...]UFFAaQ==',
 }
 ```
-
-詳細については、`REFERENCE.md`ファイルに記載されています。
-
 <a id="reference"></a>
 ## リファレンス
 
-リファレンス文書については、`REFERENCE.md`を参照してください。
+リファレンス文書については、REFERENCE.mdを参照してください。
 
 このモジュールは、Puppet Stringsを用いて文書化されています。
 
