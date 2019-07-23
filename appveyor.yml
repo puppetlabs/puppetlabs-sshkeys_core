@@ -45,7 +45,7 @@ matrix:
   fast_finish: true
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
-  - bundle install --jobs 4 --retry 2 --without system_tests
+  - bundle install --jobs 4 --retry 2
   - type Gemfile.lock
 build: off
 test_script:
