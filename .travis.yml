@@ -13,6 +13,7 @@ before_install:
   - bundle -v
 script:
   - 'bundle exec rake $CHECK'
+  - 'bundle exec rspec spec/acceptance'
 bundler_args: --without system_tests
 rvm:
   - 2.5.1
