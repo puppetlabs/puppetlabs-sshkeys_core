@@ -9,7 +9,7 @@ RSpec.context 'ssh_authorized_key: Create' do
   before(:each) do
     posix_agents.each do |agent|
       on(agent, "cp #{auth_keys} /tmp/auth_keys", acceptable_exit_codes: [0, 1])
-      on(agent, "chown $LOGNAME #{auth_keys}")
+      on(agent, "rm -f $LOGNAME #{auth_keys}")
     end
   end
 
