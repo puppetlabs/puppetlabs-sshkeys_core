@@ -85,7 +85,8 @@ will autorequire this user if it is being managed as a `user` resource.
 The absolute filename in which to store the SSH key. This
 property is optional and should be used only in cases where keys
 are stored in a non-standard location, for instance when not in
-`~user/.ssh/authorized_keys`.
+`~user/.ssh/authorized_keys`. The parent directory must be present
+if the target is in a privileged path.
 
 Default value: absent
 
@@ -119,6 +120,14 @@ Due to internal limitations, this must be unique across all user accounts;
 if you want to specify one key for multiple users, you must use a different
 comment for each instance.
 
+##### `drop_privileges`
+
+Whether to drop privileges when writing the key file. This is
+useful for creating files in paths not writable by the target user. Note
+the possible security implications of managing file ownership and
+permissions as a privileged user.
+
+Default value: `true`
 
 ### sshkey
 

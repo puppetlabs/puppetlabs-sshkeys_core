@@ -42,9 +42,28 @@ Puppet::Type.type(:ssh_authorized_key).provide(
     0o600
   end
 
-  def user
-    uid = Puppet::FileSystem.stat(target).uid
-    Etc.getpwuid(uid).name
+  def group_writable_perm
+    0o020
+  end
+
+  def group_writable?(path)
+    path.stat.mode & group_writable_perm != 0
+  end
+
+  def trusted_path
+    # return if the parent directory does not exist
+    return false unless Puppet::FileSystem.dir_exist?(target)
+    path = Puppet::FileSystem.pathname(target).dirname
+    until path.dirname.root?
+      path = path.realpath if path.symlink?
+      # do not trust if path is world or group writable
+      if path.stat.uid != Process.euid || path.world_writable? || group_writable?(path)
+        Puppet.debug('Path untrusted, will attempt to write as the target user')
+        return false
+      end
+      path = path.dirname
+    end
+    Puppet.debug('Path trusted, writing the file as the current user')
   end
 
   def flush
@@ -56,15 +75,30 @@ Puppet::Type.type(:ssh_authorized_key).provide(
     # so calling it here suppresses the later attempt by our superclass's flush method.
     self.class.backup_target(target)
 
-    Puppet::Util::SUIDManager.asuser(@resource.should(:user)) do
-      unless Puppet::FileSystem.exist?(dir = File.dirname(target))
-        Puppet.debug "Creating #{dir} as #{@resource.should(:user)}"
-        Dir.mkdir(dir, dir_perm)
-      end
+    # attempt to create the file as the specified user if we're not dropping privileges
+    if @resource[:drop_privileges]
+      Puppet::Util::SUIDManager.asuser(@resource.should(:user)) do
+        unless Puppet::FileSystem.exist?(dir = File.dirname(target))
+          Puppet.debug "Creating #{dir} as #{@resource.should(:user)}"
+          Dir.mkdir(dir, dir_perm)
+        end
+        super
 
+        File.chmod(file_perm, target)
+      end
+    # to avoid race conditions when handling permissions as a privileged user
+    # (CVE-2011-3870) we use the trusted_path method to ensure the entire
+    # directory structure is "safe" to write in
+    else
+      raise Puppet::Error, 'drop_privileges is false but the target path is not trusted' unless trusted_path
       super
 
-      File.chmod(file_perm, target)
+      uid = Puppet::Util.uid(@resource.should(:user))
+      gid = Puppet::Util.gid(@resource.should(:user))
+      File.open(target) do |target|
+        target.chown(uid, gid)
+        target.chmod(file_perm)
+      end
     end
   end
 
