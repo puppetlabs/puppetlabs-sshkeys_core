@@ -54,10 +54,7 @@
       ]
     },
     {
-      "operatingsystem": "Darwin",
-      "operatingsystemrelease": [
-        "16"
-      ]
+      "operatingsystem": "Darwin"
     },
     {
       "operatingsystem": "SLES",
