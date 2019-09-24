@@ -139,7 +139,13 @@ Valid values: present, absent
 
 The basic property that the resource should be in.
 
-Default value: present
+Default value: present 
+
+##### `purge_ssh_keys`
+
+Valid values: true, false
+
+Ensures that only the currently approved keys are present and purges unmanaged SSH keys when set to true.
 
 ##### `type`
 
