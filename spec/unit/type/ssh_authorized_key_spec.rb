@@ -17,7 +17,7 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
   end
 
   describe 'when validating attributes' do
-    [:name, :provider].each do |param|
+    [:name, :provider, :drop_privileges].each do |param|
       it "has a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq :param
       end
@@ -53,6 +53,28 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
 
       it 'nots support other values' do
         expect { described_class.new(name: 'whev', ensure: :foo, user: 'nobody') }.to raise_error(Puppet::Error, %r{Invalid value})
+      end
+    end
+
+    describe 'for drop_privileges' do
+      it 'uses true as a default value' do
+        expect(described_class.new(name: 'whev', user: 'nobody')[:drop_privileges]).to eq true
+      end
+
+      [true, :true, 'true', :yes, 'yes'].each do |value|
+        it "supports #{value} and returns a boolean true" do
+          expect(described_class.new(name: 'whev', user: 'nobody', drop_privileges: value)[:drop_privileges]).to eq true
+        end
+      end
+
+      [false, :false, 'false', :no, 'no'].each do |value|
+        it "supports #{value} and returns a boolean false" do
+          expect(described_class.new(name: 'whev', user: 'nobody', drop_privileges: value)[:drop_privileges]).to eq false
+        end
+      end
+
+      it 'raises an exception on something else' do
+        expect { described_class.new(name: 'whev', user: 'nobody', drop_privileges: 'nope') }.to raise_error(Puppet::Error, %r{Invalid value})
       end
     end
 
