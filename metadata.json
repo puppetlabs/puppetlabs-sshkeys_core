@@ -1,7 +1,7 @@
 {
   "name": "puppetlabs-sshkeys_core",
   "version": "1.0.2",
-  "author": "Puppet Labs",
+  "author": "puppetlabs",
   "summary": "Manage SSH authorized keys, and known hosts.",
   "license": "Apache-2.0",
   "source": "https://github.com/puppetlabs/puppetlabs-sshkeys_core",
@@ -86,7 +86,7 @@
       "version_requirement": ">= 6.0.0 < 7.0.0"
     }
   ],
-  "pdk-version": "1.8.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates.git",
-  "template-ref": "heads/master-0-gd61c0a4"
+  "pdk-version": "1.14.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates.git#master",
+  "template-ref": "heads/master-0-g6b5ed92"
 }
