@@ -30,6 +30,7 @@ Gemfile:
       - gem: puppet-strings
 
 Rakefile:
+  changelog_version_tag_pattern: '%s'
   requires:
     - puppet-lint/tasks/puppet-lint
 
