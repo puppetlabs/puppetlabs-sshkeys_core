@@ -4,17 +4,10 @@ RSpec.context 'sshkeys: Create' do
   let(:keyname) { "pl#{rand(999_999).to_i}" }
 
   # FIXME: This is bletcherous
-  let(:macos_version) { fact_on(agent, 'os.macosx.version.major') }
-  let(:ssh_known_hosts) do
-    if ['10.9', '10.10'].include? macos_version
-      '/etc/ssh_known_hosts'
-    else
-      '/etc/ssh/ssh_known_hosts'
-    end
-  end
+  let(:ssh_known_hosts) { '/etc/ssh/ssh_known_hosts' }
 
   before(:each) do
-    osx_agents.each do |agent|
+    posix_agents.agents.each do |agent|
       # The 'cp' might fail because the source file doesn't exist
       on(
         agent,
@@ -25,7 +18,7 @@ RSpec.context 'sshkeys: Create' do
   end
 
   after(:each) do
-    osx_agents.each do |agent|
+    posix_agents.each do |agent|
       # Is it present?
       rc = on(
         agent,
@@ -51,8 +44,8 @@ RSpec.context 'sshkeys: Create' do
     end
   end
 
-  osx_agents.each do |agent|
-    it "#{agent} should add an SSH key to the correct ssh_known_hosts file on OS X/macOS (PUP-5508)" do
+  posix_agents.each do |agent|
+    it "#{agent} should add an SSH key to the correct ssh_known_hosts file (OS X/macOS - PUP-5508)" do
       # Is it even there?
       rc = on(
         agent,
@@ -75,6 +68,39 @@ RSpec.context 'sshkeys: Create' do
 
       on(agent, "cat #{ssh_known_hosts}") do |_rc|
         expect(stdout).to include(keyname.to_s)
+      end
+    end
+  end
+
+  posix_agents.each do |agent|
+    it "#{agent} should allow to add two different type keys for the same host" do
+      # Is it even there?
+      rc = on(
+        agent,
+        "[ ! -e #{ssh_known_hosts} ]",
+        acceptable_exit_codes: [0, 1],
+      )
+      if rc.exit_code == 1
+        # If it's there, it should be empty
+        on(agent, "cat #{ssh_known_hosts}") do |_res|
+          expect(stdout).to be_empty
+        end
+      end
+      on agent, puppet('apply'), stdin: <<MANIFEST
+      sshkey { '#{keyname}@ssh-rsa':
+        ensure => 'present',
+        key    =>  'how_about_the_rsa_key_of_c',
+      }
+
+      sshkey { '#{keyname}@ssh-dss':
+        ensure => 'present',
+        key    =>  'how_about_the_dss_key_of_c',
+      }
+MANIFEST
+
+      on(agent, "cat #{ssh_known_hosts}") do |_rc|
+        expect(stdout).to include("#{keyname} ssh-rsa")
+        expect(stdout).to include("#{keyname} ssh-dss")
       end
     end
   end

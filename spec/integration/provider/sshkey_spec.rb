@@ -52,9 +52,29 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
       expect(File.read(sshkey_file)).to match(%r{#{super_unique}.*mykey})
     end
 
+    it 'creates two SSH host key entries with two keys (ensure present)' do
+      manifest = "
+      #{type_under_test} { '#{super_unique}_rsa':
+        ensure => 'present',
+        type   => 'rsa',
+        name   => '#{super_unique}',
+        key    => 'myrsakey',
+        target => '#{sshkey_file}', }
+      #{type_under_test} { '#{super_unique}_dss':
+        ensure => 'present',
+        type   => 'ssh-dss',
+        name   => '#{super_unique}',
+        key    => 'mydsskey',
+        target => '#{sshkey_file}' }"
+      apply_with_error_check(manifest)
+      expect(File.read(sshkey_file)).to match(%r{#{super_unique}.*myrsakey})
+      expect(File.read(sshkey_file)).to match(%r{#{super_unique}.*mydsskey})
+    end
+
     it 'deletes an entry for an SSH host key' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
       ensure => 'absent',
+      type   => 'rsa',
       target => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
       expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
@@ -121,6 +141,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
     it 'updates an entry with a single new host_alias' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
       ensure       => 'present',
+      type         => 'rsa',
       host_aliases => '#{host_alias}',
       target       => '#{sshkey_file}' }"
       apply_with_error_check(manifest)
@@ -132,6 +153,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
     it 'updates an entry with multiple new host_aliases' do
       manifest = "#{type_under_test} { '#{sshkey_name}':
       ensure       => 'present',
+      type         => 'rsa',
       host_aliases => [ 'r0ckdata.com', 'erict.net' ],
       target       => '#{sshkey_file}' }"
       apply_with_error_check(manifest)

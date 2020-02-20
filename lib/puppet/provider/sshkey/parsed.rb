@@ -46,4 +46,9 @@ Puppet::Type.type(:sshkey).provide(
       '/etc/ssh/ssh_known_hosts'
     end
   end
+
+  def self.resource_for_record(record, resources)
+    name = "#{record[:name]}@#{record[:type]}"
+    resources[name]
+  end
 end
