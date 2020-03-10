@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-RSpec.context 'sshkeys: Destroy' do
+RSpec.context 'ssh_authorized_key: Destroy' do
   confine :except, platform: ['windows']
 
   let(:auth_keys) { '~/.ssh/authorized_keys' }

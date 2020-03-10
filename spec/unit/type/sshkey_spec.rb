@@ -1,18 +1,19 @@
 require 'spec_helper'
+require 'pry'
 
 describe Puppet::Type.type(:sshkey) do
-  it 'uses :name as its namevar' do
-    expect(described_class.key_attributes).to eq [:name]
+  it 'uses :name and :type as its namevar' do
+    expect(described_class.key_attributes).to eq [:type, :name]
   end
 
   describe 'when validating attributes' do
-    [:name, :provider].each do |param|
+    [:name, :provider, :type].each do |param|
       it "has a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq :param
       end
     end
 
-    [:host_aliases, :ensure, :key, :type].each do |property|
+    [:host_aliases, :ensure, :key].each do |property|
       it "has a #{property} property" do
         expect(described_class.attrtype(property)).to eq :property
       end
@@ -35,12 +36,12 @@ describe Puppet::Type.type(:sshkey) do
 
     it 'aliases :rsa to :ssh-rsa' do
       key = described_class.new(name: 'foo', type: :rsa)
-      expect(key.should(:type)).to eq :'ssh-rsa'
+      expect(key.parameter(:type).value).to eq :'ssh-rsa'
     end
 
     it 'aliases :dsa to :ssh-dss' do
       key = described_class.new(name: 'foo', type: :dsa)
-      expect(key.should(:type)).to eq :'ssh-dss'
+      expect(key.parameter(:type).value).to eq :'ssh-dss'
     end
 
     it "doesn't support values other than ssh-dss, ssh-rsa, dsa, rsa for type" do
