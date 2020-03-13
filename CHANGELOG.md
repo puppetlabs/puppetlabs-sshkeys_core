@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [2.0.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/2.0.0) (2020-03-12)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/1.0.3...2.0.0)
+
+### Changed
+
+- \(MODULES-7613\) use name and type as composite namevar [\#27](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/27) ([ciprianbadescu](https://github.com/ciprianbadescu))
+
 ## [1.0.3](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/1.0.3) (2019-10-31)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/1.0.2...1.0.3)
