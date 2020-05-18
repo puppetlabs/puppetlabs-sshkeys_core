@@ -1,8 +1,9 @@
 # Reference
 
 ## Resource types
-* [`ssh_authorized_key`](#ssh_authorized_key): Manages SSH authorized keys. Currently only type 2 keys are supported.  In their native habitat, SSH keys usually appear as a single long lin
-* [`sshkey`](#sshkey): Installs and manages ssh host keys.  By default, this type will install keys into `/etc/ssh/ssh_known_hosts`. To manage ssh keys in a differe
+* [`ssh_authorized_key`](#ssh_authorized_key): Manages SSH authorized keys.
+* [`sshkey`](#sshkey): Installs and manages ssh host keys.
+
 ## Resource types
 
 ### ssh_authorized_key
@@ -189,5 +190,3 @@ The following parameters are available in the `sshkey` type.
 namevar
 
 The host name that the key is associated with.
-
-
