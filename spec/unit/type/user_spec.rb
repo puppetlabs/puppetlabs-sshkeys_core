@@ -55,23 +55,23 @@ describe Puppet::Type.type(:user) do
       end
     end
 
-    context 'with no home directory specified' do
-      it 'does not accept true' do
-        expect {
+    if Puppet.version.start_with?('6')
+      context 'with no home directory specified' do
+        before(:each) do
+          Dir.stubs(:home).with('a').returns('/home/a')
+        end
+
+        it 'does accept true' do
           described_class.new(name: 'a', purge_ssh_keys: true)
-        }.to raise_error(Puppet::Error, %r{purge_ssh_keys can only be true for users with a defined home directory})
-      end
+        end
 
-      it 'does not accept the ~ wildcard' do
-        expect {
+        it 'does accept the ~ wildcard' do
           described_class.new(name: 'a', purge_ssh_keys: '~/keys')
-        }.to raise_error(Puppet::Error, %r{meta character ~ or %h only allowed for users with a defined home directory})
-      end
+        end
 
-      it 'does not accept the %h wildcard' do
-        expect {
+        it 'does accept the %h wildcard' do
           described_class.new(name: 'a', purge_ssh_keys: '%h/keys')
-        }.to raise_error(Puppet::Error, %r{meta character ~ or %h only allowed for users with a defined home directory})
+        end
       end
     end
 
@@ -80,6 +80,10 @@ describe Puppet::Type.type(:user) do
         res = described_class.new(name: 'test', purge_ssh_keys: paths)
         res.catalog = Puppet::Resource::Catalog.new
         res
+      end
+
+      before(:each) do
+        Dir.stubs(:home).with('test').returns('/home/test')
       end
 
       let(:paths) do
@@ -104,6 +108,10 @@ describe Puppet::Type.type(:user) do
         res = described_class.new(name: 'test_user_name', purge_ssh_keys: purge_param)
         res.catalog = Puppet::Resource::Catalog.new
         res
+      end
+
+      before(:each) do
+        Dir.stubs(:home).with('test_user_name').returns('/home/test_user_name')
       end
 
       context 'when purging is disabled' do
