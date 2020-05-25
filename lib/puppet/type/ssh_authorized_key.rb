@@ -62,11 +62,14 @@ module Puppet
     newproperty(:type) do
       desc 'The encryption type used.'
 
-      newvalues :'ssh-dss', :'ssh-rsa', :'ecdsa-sha2-nistp256', :'ecdsa-sha2-nistp384', :'ecdsa-sha2-nistp521', :'ssh-ed25519'
+      newvalues :'ssh-dss', :'ssh-rsa', :'ecdsa-sha2-nistp256', :'ecdsa-sha2-nistp384', :'ecdsa-sha2-nistp521', :'ssh-ed25519',
+                :'sk-ecdsa-sha2-nistp256@openssh.com', :'sk-ssh-ed25519@openssh.com'
 
       aliasvalue(:dsa, :'ssh-dss')
       aliasvalue(:ed25519, :'ssh-ed25519')
       aliasvalue(:rsa, :'ssh-rsa')
+      aliasvalue(:'ecdsa-sk', :'sk-ecdsa-sha2-nistp256@openssh.com')
+      aliasvalue(:'ed25519-sk', :'sk-ssh-ed25519@openssh.com')
     end
 
     newproperty(:key) do
@@ -159,7 +162,9 @@ module Puppet
     end
 
     # regular expression suitable for use by a ParsedFile based provider
-    REGEX = %r{^(?:(.+)\s+)?(ssh-dss|ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp256|ecdsa-sha2-nistp384|ecdsa-sha2-nistp521)\s+([^ ]+)\s*(.*)$}
+    REGEX = %r{^(?:(.+)\s+)?(ssh-dss|ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp256|
+            ecdsa-sha2-nistp384|ecdsa-sha2-nistp521|ecdsa-sk|ed25519-sk|
+            sk-ecdsa-sha2-nistp256@openssh.com|sk-ssh-ed25519@openssh.com)\s+([^ ]+)\s*(.*)$}x
     def self.keyline_regex
       REGEX
     end

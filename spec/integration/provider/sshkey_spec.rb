@@ -91,6 +91,25 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
       expect(File.read(sshkey_file)).not_to match(%r{#{sshkey_name}.*Yqk0=})
     end
 
+    it 'prioritizes the specified type instead of type in the name' do
+      manifest = "#{type_under_test} { '#{super_unique}@rsa':
+      ensure => 'present',
+      type   => 'dsa',
+      key    => 'mykey',
+      target => '#{sshkey_file}' }"
+      apply_with_error_check(manifest)
+      expect(File.read(sshkey_file)).to match(%r{#{super_unique} ssh-dss.*mykey})
+    end
+
+    it 'can parse SSH key type that contains @openssh.com in name' do
+      manifest = "#{type_under_test} { '#{super_unique}@sk-ssh-ed25519@openssh.com':
+      ensure => 'present',
+      key    => 'mykey',
+      target => '#{sshkey_file}' }"
+      apply_with_error_check(manifest)
+      expect(File.read(sshkey_file)).to match(%r{#{super_unique} sk-ssh-ed25519@openssh.com.*mykey})
+    end
+
     # test all key types
     types = [
       'ssh-dss',     'dsa',
@@ -98,14 +117,18 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
       'ssh-rsa',     'rsa',
       'ecdsa-sha2-nistp256',
       'ecdsa-sha2-nistp384',
-      'ecdsa-sha2-nistp521'
+      'ecdsa-sha2-nistp521',
+      'ecdsa-sk', 'sk-ecdsa-sha2-nistp256@openssh.com',
+      'ed25519-sk', 'sk-ssh-ed25519@openssh.com'
     ]
     # these types are treated as aliases for sshkey <ahem> type
     #   so they are populated as the *values* below
     aliases = {
-      'dsa'     => 'ssh-dss',
-      'ed25519' => 'ssh-ed25519',
-      'rsa'     => 'ssh-rsa',
+      'dsa'        => 'ssh-dss',
+      'ed25519'    => 'ssh-ed25519',
+      'rsa'        => 'ssh-rsa',
+      'ecdsa-sk'   => 'sk-ecdsa-sha2-nistp256@openssh.com',
+      'ed25519-sk' => 'sk-ssh-ed25519@openssh.com',
     }
     types.each do |type|
       it "should update an entry with #{type} type" do
