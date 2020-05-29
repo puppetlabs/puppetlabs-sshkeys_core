@@ -85,7 +85,9 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
         :'ecdsa-sha2-nistp256',
         :'ecdsa-sha2-nistp384',
         :'ecdsa-sha2-nistp521',
-        :ed25519, :'ssh-ed25519'
+        :ed25519, :'ssh-ed25519',
+        :'ecdsa-sk', :'sk-ecdsa-sha2-nistp256@openssh.com',
+        :'ed25519-sk', :'sk-ssh-ed25519@openssh.com'
       ].each do |keytype|
         it "supports #{keytype}" do
           described_class.new(name: 'whev', type: keytype, user: 'nobody')
@@ -100,6 +102,16 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
       it 'aliases :dsa to :ssh-dss' do
         key = described_class.new(name: 'whev', type: :dsa, user: 'nobody')
         expect(key.should(:type)).to eq :'ssh-dss'
+      end
+
+      it 'aliases :ecdsa-sk to :sk-ecdsa-sha2-nistp256@openssh.com' do
+        key = described_class.new(name: 'whev', type: :'ecdsa-sk', user: 'nobody')
+        expect(key.should(:type)).to eq :'sk-ecdsa-sha2-nistp256@openssh.com'
+      end
+
+      it 'aliases :ed25519-sk to :sk-ssh-ed25519@openssh.com' do
+        key = described_class.new(name: 'whev', type: :'ed25519-sk', user: 'nobody')
+        expect(key.should(:type)).to eq :'sk-ssh-ed25519@openssh.com'
       end
 
       it "doesn't support values other than ssh-dss, ssh-rsa, dsa, rsa" do
