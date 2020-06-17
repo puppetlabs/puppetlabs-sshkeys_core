@@ -28,6 +28,10 @@ Puppet::Type.type(:sshkey).provide(
     0o644
   end
 
+  def title
+    "#{property_hash[:name]}@#{property_hash[:type]}"
+  end
+
   def self.default_target
     case Facter.value(:operatingsystem)
     when 'Darwin'

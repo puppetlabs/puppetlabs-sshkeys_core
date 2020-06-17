@@ -12,6 +12,10 @@ module Puppet
       "#{self[:name]}@#{self[:type]}"
     end
 
+    def self.parameters_to_include
+      [:name, :type]
+    end
+
     def self.title_patterns
       [
         [
