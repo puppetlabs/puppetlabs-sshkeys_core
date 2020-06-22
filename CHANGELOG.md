@@ -2,7 +2,19 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [2.0.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/2.0.0) (2020-03-12)
+## [2.1.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/2.1.0) (2020-06-22)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/2.0.0...2.1.0)
+
+### Added
+
+- \(MODULES-10671\) New SSH key types for OpenSSH 8.2 [\#31](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/31) ([Dorin-Pleava](https://github.com/Dorin-Pleava))
+
+### Fixed
+
+- \(PUP-10510\) Fix sshkeys not being correctly purged [\#32](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/32) ([GabrielNagy](https://github.com/GabrielNagy))
+
+## [2.0.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/2.0.0) (2020-03-13)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/1.0.3...2.0.0)
 
