@@ -89,7 +89,8 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
         :'ecdsa-sk', :'sk-ecdsa-sha2-nistp256@openssh.com',
         :'ed25519-sk', :'sk-ssh-ed25519@openssh.com',
         :'ssh-rsa-cert-v01@openssh.com',
-        :'ssh-ed25519-cert-v01@openssh.com'
+        :'ssh-ed25519-cert-v01@openssh.com',
+        :'ssh-dss-cert-v01@openssh.com'
       ].each do |keytype|
         it "supports #{keytype}" do
           described_class.new(name: 'whev', type: keytype, user: 'nobody')
@@ -151,6 +152,13 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
         expect { described_class.new(name: 'bastelfreakwashere', type: :'ssh-ed25519-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAIHNzaC1lZDI1NTE5LWNlcnQtdjAxQG9wZW5zc2guY29tAAAAII03FWZnj5mlByzlCf6DrreuQ1xd4P06OpWVtTv1LA8tAAAAIAELyKZcNagkQdfPc484zFekxiBOfkTYW5WQp8ZEQ0yRAAAAAAAAAAAAAAACAAAAEGhvc3QuZXhhbXBsZS5jb20AAAAUAAAAEGhvc3QuZXhhbXBsZS5jb20AAAAAXyxVTAAAAABhDDeOAAAAAAAAAAAAAAAAAAAAMwAAAAtzc2gtZWQyNTUxOQAAACABC8imXDWoJEHXz3OPOMxXpMYgTn5E2FuVkKfGRENMkQAAAFMAAAALc3NoLWVkMjU1MTkAAABAMeOkwGO8xK4xLWXemAtcwyFkBT+I57PdBI9Y+6r2MpU8WqpvY8BpR8eohwzrSyTaxt/SeRrrQ+npfMY1g2z5DA==') }.not_to raise_error # rubocop:disable Metrics/LineLength
       end
       # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ssh-dss-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ssh-dss-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAHHNzaC1kc3MtY2VydC12MDFAb3BlbnNzaC5jb20AAAAgcCc5I4UIAZWRjnkQx/IiMadlKaM8AncxZnEepHrJU7QAAACBAK+gMKBIurFf2QdcVgf+PVJBJlGcC61ej2pFSaZURhgcyhAzf0PAxWwWmeSb5m89PXy09Q4ufDV/iDTKCLV2/tM/fk8Nqk8zT8R92SCdVLy5mN7q8seFhrDeZ1zsWRU6nQHFYiwoS0VhtMyGp1J39mX7wJqbdnIuG/1cqhB4Lxh7AAAAFQDPYY2uOe2WOrQQQY50KUjsUUdrrwAAAIBOio9RBHQasCGAuXGczY2ORp3P0rsUlPR7pLJ9C1+wN1tLfTmOkn9iNmRR3O1xButRs1gBkhlTz7zRreWHOtcXOEoZmj1wIvPqFdmvKv4KX5krq2Dd6vcmTO1LW5CZXvlPM5hYK+IE5+bER1K68xjDIIZfiM0tEmBhnME8nXENeAAAAIEAlHywsFzvdR8VP3acZSHdy82iiKslTn1fOeS10uk+qYZXP7NOhUf+b9WhGSCcv3IzlCGSHs5ClfmABBWUDJyOxF3Fwlmx1z/detbJYgrSBc6bzrqqofac7pWjf3lN7pB/bX4zpN27BjIUwDxYvLRdHlrwA5vZTN98187wOt7D1cwAAAAAAAAAAAAAAAIAAAAQaG9zdC5leGFtcGxlLmNvbQAAABQAAAAQaG9zdC5leGFtcGxlLmNvbQAAAABfLFZ4AAAAAGEMOLkAAAAAAAAAAAAAAAAAAAGyAAAAB3NzaC1kc3MAAACBAK+gMKBIurFf2QdcVgf+PVJBJlGcC61ej2pFSaZURhgcyhAzf0PAxWwWmeSb5m89PXy09Q4ufDV/iDTKCLV2/tM/fk8Nqk8zT8R92SCdVLy5mN7q8seFhrDeZ1zsWRU6nQHFYiwoS0VhtMyGp1J39mX7wJqbdnIuG/1cqhB4Lxh7AAAAFQDPYY2uOe2WOrQQQY50KUjsUUdrrwAAAIBOio9RBHQasCGAuXGczY2ORp3P0rsUlPR7pLJ9C1+wN1tLfTmOkn9iNmRR3O1xButRs1gBkhlTz7zRreWHOtcXOEoZmj1wIvPqFdmvKv4KX5krq2Dd6vcmTO1LW5CZXvlPM5hYK+IE5+bER1K68xjDIIZfiM0tEmBhnME8nXENeAAAAIEAlHywsFzvdR8VP3acZSHdy82iiKslTn1fOeS10uk+qYZXP7NOhUf+b9WhGSCcv3IzlCGSHs5ClfmABBWUDJyOxF3Fwlmx1z/detbJYgrSBc6bzrqqofac7pWjf3lN7pB/bX4zpN27BjIUwDxYvLRdHlrwA5vZTN98187wOt7D1cwAAAA3AAAAB3NzaC1kc3MAAAAoqdL2M2Q5R6xBk1mym3GrtmF7EbAh0PX0LiQ78c4+eQaWHJ71cEIe6A==') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
       it "doesn't support whitespaces" do
         expect { described_class.new(name: 'whev', type: :rsa, user: 'nobody', key: 'AAA FA==') }.to raise_error(Puppet::Error, %r{Key must not contain whitespace})
       end
