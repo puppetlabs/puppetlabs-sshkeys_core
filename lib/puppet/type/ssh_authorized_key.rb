@@ -64,7 +64,8 @@ module Puppet
 
       newvalues :'ssh-dss', :'ssh-rsa', :'ecdsa-sha2-nistp256', :'ecdsa-sha2-nistp384', :'ecdsa-sha2-nistp521', :'ssh-ed25519',
                 :'sk-ecdsa-sha2-nistp256@openssh.com', :'sk-ssh-ed25519@openssh.com', :'ssh-rsa-cert-v01@openssh.com',
-                :'ssh-ed25519-cert-v01@openssh.com', :'ssh-dss-cert-v01@openssh.com', :'ecdsa-sha2-nistp256-cert-v01@openssh.com'
+                :'ssh-ed25519-cert-v01@openssh.com', :'ssh-dss-cert-v01@openssh.com', :'ecdsa-sha2-nistp256-cert-v01@openssh.com',
+                :'ecdsa-sha2-nistp384-cert-v01@openssh.com'
 
       aliasvalue(:dsa, :'ssh-dss')
       aliasvalue(:ed25519, :'ssh-ed25519')
@@ -167,7 +168,8 @@ module Puppet
             ecdsa-sha2-nistp384|ecdsa-sha2-nistp521|ecdsa-sk|ed25519-sk|
             sk-ecdsa-sha2-nistp256@openssh.com|sk-ssh-ed25519@openssh.com|
             ssh-rsa-cert-v01@openssh.com|ssh-ed25519-cert-v01@openssh.com|
-            ssh-dss-cert-v01@openssh.com|ecdsa-sha2-nistp256-cert-v01@openssh.com)\s+([^ ]+)\s*(.*)$}x
+            ssh-dss-cert-v01@openssh.com|ecdsa-sha2-nistp256-cert-v01@openssh.com|
+            ecdsa-sha2-nistp384-cert-v01@openssh.com)\s+([^ ]+)\s*(.*)$}x
     def self.keyline_regex
       REGEX
     end

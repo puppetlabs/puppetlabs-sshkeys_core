@@ -91,7 +91,8 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
         :'ssh-rsa-cert-v01@openssh.com',
         :'ssh-ed25519-cert-v01@openssh.com',
         :'ssh-dss-cert-v01@openssh.com',
-        :'ecdsa-sha2-nistp256-cert-v01@openssh.com'
+        :'ecdsa-sha2-nistp256-cert-v01@openssh.com',
+        :'ecdsa-sha2-nistp384-cert-v01@openssh.com'
       ].each do |keytype|
         it "supports #{keytype}" do
           described_class.new(name: 'whev', type: keytype, user: 'nobody')
@@ -163,6 +164,12 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
       # rubocop:disable Metrics/LineLength
       it 'supports a valid ecdsa-sha2-nistp256-cert-v01@openssh.com key' do
         expect { described_class.new(name: 'bastelfreakwashere', type: :'ecdsa-sha2-nistp256-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAKGVjZHNhLXNoYTItbmlzdHAyNTYtY2VydC12MDFAb3BlbnNzaC5jb20AAAAgQUGk9Pzd+RqECXZMmgj8bFEumUGfZPEhJhyUusF7hvwAAAAIbmlzdHAyNTYAAABBBBmo/Yw8pVDSObTkJxlpYL5s9tVnpj7ubeky+PKY2zJ8pRYIHS3XJ6x/NyB/iFoYlGxrn4CaMPwNvYxvSEdTj60AAAAAAAAAAAAAAAIAAAAQaG9zdC5leGFtcGxlLmNvbQAAABQAAAAQaG9zdC5leGFtcGxlLmNvbQAAAABfLFfgAAAAAGEMOkIAAAAAAAAAAAAAAAAAAABoAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBmo/Yw8pVDSObTkJxlpYL5s9tVnpj7ubeky+PKY2zJ8pRYIHS3XJ6x/NyB/iFoYlGxrn4CaMPwNvYxvSEdTj60AAABjAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAABIAAAAIGkErINcPm1MpBhKuUmdR0KAPJGZCSeGT9E6FafcVhlFAAAAIERD5WsflI5QdJETz3n64tIDcdPbUF0GQW8iP8EV+Nf5') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ecdsa-sha2-nistp384-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ecdsa-sha2-nistp384-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAKGVjZHNhLXNoYTItbmlzdHAzODQtY2VydC12MDFAb3BlbnNzaC5jb20AAAAgh+/K6gv7WlwX9qVlKLH8Vurzo5xfc8/glVcT7auQOhIAAAAIbmlzdHAzODQAAABhBDouPHnR+OD4jfdqMbhFXTfB8vTjpZYLQSl0HxEXRAs8AgqDEZI1lJEVwdxtJUbczyu1Wj7wM45YpSpgUQVU38rmVkpxujqhhMMmqMWf87gnjm9oVLLFvJHdauKNnXjJQQAAAAAAAAAAAAAAAgAAABBob3N0LmV4YW1wbGUuY29tAAAAFAAAABBob3N0LmV4YW1wbGUuY29tAAAAAF8sWnQAAAAAYQw85wAAAAAAAAAAAAAAAAAAAIgAAAATZWNkc2Etc2hhMi1uaXN0cDM4NAAAAAhuaXN0cDM4NAAAAGEEOi48edH44PiN92oxuEVdN8Hy9OOllgtBKXQfERdECzwCCoMRkjWUkRXB3G0lRtzPK7VaPvAzjlilKmBRBVTfyuZWSnG6OqGEwyaoxZ/zuCeOb2hUssW8kd1q4o2deMlBAAAAgwAAABNlY2RzYS1zaGEyLW5pc3RwMzg0AAAAaAAAADBJccfmOaYjNVbqkx0X7cLpl53EzTAMdv9k159mBLYaepMnLYmhKx+LvfA5bAUTar4AAAAwSO7n770NIdhhMZjGio4GKDyKq2WW6QLRXleY6QcynBaQ90rkMVnt+jeIEs30h6F8') }.not_to raise_error # rubocop:disable Metrics/LineLength
       end
       # rubocop:enable Metrics/LineLength
 
