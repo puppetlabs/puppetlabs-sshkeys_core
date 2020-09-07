@@ -87,7 +87,13 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
         :'ecdsa-sha2-nistp521',
         :ed25519, :'ssh-ed25519',
         :'ecdsa-sk', :'sk-ecdsa-sha2-nistp256@openssh.com',
-        :'ed25519-sk', :'sk-ssh-ed25519@openssh.com'
+        :'ed25519-sk', :'sk-ssh-ed25519@openssh.com',
+        :'ssh-rsa-cert-v01@openssh.com',
+        :'ssh-ed25519-cert-v01@openssh.com',
+        :'ssh-dss-cert-v01@openssh.com',
+        :'ecdsa-sha2-nistp256-cert-v01@openssh.com',
+        :'ecdsa-sha2-nistp384-cert-v01@openssh.com',
+        :'ecdsa-sha2-nistp521-cert-v01@openssh.com'
       ].each do |keytype|
         it "supports #{keytype}" do
           described_class.new(name: 'whev', type: keytype, user: 'nobody')
@@ -135,6 +141,42 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
       # rubocop:disable Metrics/LineLength
       it 'supports a valid key like a 1024 bit dsa key' do
         expect { described_class.new(name: 'whev', type: :dsa, user: 'nobody', key: 'AAAAB3NzaC1kc3MAAACBAI80iR78QCgpO4WabVqHHdEDigOjUEHwIjYHIubR/7u7DYrXY+e+TUmZ0CVGkiwB/0yLHK5dix3Y/bpj8ZiWCIhFeunnXccOdE4rq5sT2V3l1p6WP33RpyVYbLmeuHHl5VQ1CecMlca24nHhKpfh6TO/FIwkMjghHBfJIhXK+0w/AAAAFQDYzLupuMY5uz+GVrcP+Kgd8YqMmwAAAIB3SVN71whLWjFPNTqGyyIlMy50624UfNOaH4REwO+Of3wm/cE6eP8n75vzTwQGBpJX3BPaBGW1S1Zp/DpTOxhCSAwZzAwyf4WgW7YyAOdxN3EwTDJZeyiyjWMAOjW9/AOWt9gtKg0kqaylbMHD4kfiIhBzo31ZY81twUzAfN7angAAAIBfva8sTSDUGKsWWIXkdbVdvM4X14K4gFdy0ZJVzaVOtZ6alysW6UQypnsl6jfnbKvsZ0tFgvcX/CPyqNY/gMR9lyh/TCZ4XQcbqeqYPuceGehz+jL5vArfqsW2fJYFzgCcklmr/VxtP5h6J/T0c9YcDgc/xIfWdZAlznOnphI/FA==') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ssh-rsa-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ssh-rsa-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAHHNzaC1yc2EtY2VydC12MDFAb3BlbnNzaC5jb20AAAAg07B03uArzrZbW5YYiH8y+mT5NNjbKOfDVz13rBPyiDAAAAADAQABAAABgQCltzNwldRtt+sn0EXx9IMPeeoGRQUpOD2KyLW7BfJSf+40SJnsVE4MkuH1WiJnow9nwhTMtBEIkx7ocqw6bBXxrXmnqMV50DbLYZiEVz1UDRdXx5RMnNb3bbmmsyf/doNeyDjiIHAwNM4cSyUppTwLw3sU/YcdeNSBbFcUDt5dJpZw6OjiD+V3OTdvpbmBeG7sftNM6871SRmNyc2T79bwG0QxBd1XMMwgK8ZjRkCPDLVl63Jy1vbV00mT65Gd+2enSC9Lb63XHS9ixZQ+vPqn9cw8ESNq3M3tNMvLUj4HdjopaEO8CAMMIjXWIJz8oOPUGWu2oFkSpWAo9r/lW+ox6s1QGbjp0l86Ve9KybHpaVKkWn9wJUDqcF04n82PHYJFs0srn397iN5FC/DHpviEBmT/GAzLeqnslf2f9lGXA/UleVE6fI3WUwlzcEgIy6rrozxh4lEPe7f5CqDIkjv6cIrid9StzqBPQE7U10yjlr/U3EKYajv5Il7gIg/qRaMAAAAAAAAAAAAAAAIAAAAQaG9zdC5leGFtcGxlLmNvbQAAABQAAAAQaG9zdC5leGFtcGxlLmNvbQAAAABfLFAkAAAAAGEMMoEAAAAAAAAAAAAAAAAAAAGXAAAAB3NzaC1yc2EAAAADAQABAAABgQCltzNwldRtt+sn0EXx9IMPeeoGRQUpOD2KyLW7BfJSf+40SJnsVE4MkuH1WiJnow9nwhTMtBEIkx7ocqw6bBXxrXmnqMV50DbLYZiEVz1UDRdXx5RMnNb3bbmmsyf/doNeyDjiIHAwNM4cSyUppTwLw3sU/YcdeNSBbFcUDt5dJpZw6OjiD+V3OTdvpbmBeG7sftNM6871SRmNyc2T79bwG0QxBd1XMMwgK8ZjRkCPDLVl63Jy1vbV00mT65Gd+2enSC9Lb63XHS9ixZQ+vPqn9cw8ESNq3M3tNMvLUj4HdjopaEO8CAMMIjXWIJz8oOPUGWu2oFkSpWAo9r/lW+ox6s1QGbjp0l86Ve9KybHpaVKkWn9wJUDqcF04n82PHYJFs0srn397iN5FC/DHpviEBmT/GAzLeqnslf2f9lGXA/UleVE6fI3WUwlzcEgIy6rrozxh4lEPe7f5CqDIkjv6cIrid9StzqBPQE7U10yjlr/U3EKYajv5Il7gIg/qRaMAAAGUAAAADHJzYS1zaGEyLTUxMgAAAYAdrQYxs/y/eYGBLQJIDQkCN5MumF3s14rpivxdkow6hc3fClLiVF0KE8viyENPpYmhUMOPFqpm/acCz9ueP1kigHw1P8la2E7FFDyAOveD8qLE+y2MigjRq1ZGzc8C4mjZutA3v+MO2Jxa+X9ZBs99wYDfAsD/3LeNFQfHJK7PlxZCFF//ZOkOfR3nLHyIWF1XHLzZlXgM5pQbsrrZF2I0VCU+BhsBI0gBrmvSflEgBlZqCipChGPBaRybK+OLa4rUq+HzCnHsaJ3KMri8aN5TMlMd2tZPq3ZaaaBRgg67nqm7B76c0kBI9vApB4KvvPxReJTAL9YUMXRzrNLSxbraQXhx8JYKEyIad1o4TXqKZBj+qzpR0L+w8RGkNZ+OhJiisP5WMuR1oTgZNPqNYDmpU84GAnzXgdjR5NpTxneQPRGD8SfRC+RsNqI5Vs5J5n5Ap5MoqlttiY86C+Ofe4/6GVIWVQuDpSMzhaRbgEVj4XxT9VLuDSWy8/l85UxKkQ8=') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ssh-ed25519-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ssh-ed25519-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAIHNzaC1lZDI1NTE5LWNlcnQtdjAxQG9wZW5zc2guY29tAAAAII03FWZnj5mlByzlCf6DrreuQ1xd4P06OpWVtTv1LA8tAAAAIAELyKZcNagkQdfPc484zFekxiBOfkTYW5WQp8ZEQ0yRAAAAAAAAAAAAAAACAAAAEGhvc3QuZXhhbXBsZS5jb20AAAAUAAAAEGhvc3QuZXhhbXBsZS5jb20AAAAAXyxVTAAAAABhDDeOAAAAAAAAAAAAAAAAAAAAMwAAAAtzc2gtZWQyNTUxOQAAACABC8imXDWoJEHXz3OPOMxXpMYgTn5E2FuVkKfGRENMkQAAAFMAAAALc3NoLWVkMjU1MTkAAABAMeOkwGO8xK4xLWXemAtcwyFkBT+I57PdBI9Y+6r2MpU8WqpvY8BpR8eohwzrSyTaxt/SeRrrQ+npfMY1g2z5DA==') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ssh-dss-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ssh-dss-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAHHNzaC1kc3MtY2VydC12MDFAb3BlbnNzaC5jb20AAAAgcCc5I4UIAZWRjnkQx/IiMadlKaM8AncxZnEepHrJU7QAAACBAK+gMKBIurFf2QdcVgf+PVJBJlGcC61ej2pFSaZURhgcyhAzf0PAxWwWmeSb5m89PXy09Q4ufDV/iDTKCLV2/tM/fk8Nqk8zT8R92SCdVLy5mN7q8seFhrDeZ1zsWRU6nQHFYiwoS0VhtMyGp1J39mX7wJqbdnIuG/1cqhB4Lxh7AAAAFQDPYY2uOe2WOrQQQY50KUjsUUdrrwAAAIBOio9RBHQasCGAuXGczY2ORp3P0rsUlPR7pLJ9C1+wN1tLfTmOkn9iNmRR3O1xButRs1gBkhlTz7zRreWHOtcXOEoZmj1wIvPqFdmvKv4KX5krq2Dd6vcmTO1LW5CZXvlPM5hYK+IE5+bER1K68xjDIIZfiM0tEmBhnME8nXENeAAAAIEAlHywsFzvdR8VP3acZSHdy82iiKslTn1fOeS10uk+qYZXP7NOhUf+b9WhGSCcv3IzlCGSHs5ClfmABBWUDJyOxF3Fwlmx1z/detbJYgrSBc6bzrqqofac7pWjf3lN7pB/bX4zpN27BjIUwDxYvLRdHlrwA5vZTN98187wOt7D1cwAAAAAAAAAAAAAAAIAAAAQaG9zdC5leGFtcGxlLmNvbQAAABQAAAAQaG9zdC5leGFtcGxlLmNvbQAAAABfLFZ4AAAAAGEMOLkAAAAAAAAAAAAAAAAAAAGyAAAAB3NzaC1kc3MAAACBAK+gMKBIurFf2QdcVgf+PVJBJlGcC61ej2pFSaZURhgcyhAzf0PAxWwWmeSb5m89PXy09Q4ufDV/iDTKCLV2/tM/fk8Nqk8zT8R92SCdVLy5mN7q8seFhrDeZ1zsWRU6nQHFYiwoS0VhtMyGp1J39mX7wJqbdnIuG/1cqhB4Lxh7AAAAFQDPYY2uOe2WOrQQQY50KUjsUUdrrwAAAIBOio9RBHQasCGAuXGczY2ORp3P0rsUlPR7pLJ9C1+wN1tLfTmOkn9iNmRR3O1xButRs1gBkhlTz7zRreWHOtcXOEoZmj1wIvPqFdmvKv4KX5krq2Dd6vcmTO1LW5CZXvlPM5hYK+IE5+bER1K68xjDIIZfiM0tEmBhnME8nXENeAAAAIEAlHywsFzvdR8VP3acZSHdy82iiKslTn1fOeS10uk+qYZXP7NOhUf+b9WhGSCcv3IzlCGSHs5ClfmABBWUDJyOxF3Fwlmx1z/detbJYgrSBc6bzrqqofac7pWjf3lN7pB/bX4zpN27BjIUwDxYvLRdHlrwA5vZTN98187wOt7D1cwAAAA3AAAAB3NzaC1kc3MAAAAoqdL2M2Q5R6xBk1mym3GrtmF7EbAh0PX0LiQ78c4+eQaWHJ71cEIe6A==') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ecdsa-sha2-nistp256-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ecdsa-sha2-nistp256-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAKGVjZHNhLXNoYTItbmlzdHAyNTYtY2VydC12MDFAb3BlbnNzaC5jb20AAAAgQUGk9Pzd+RqECXZMmgj8bFEumUGfZPEhJhyUusF7hvwAAAAIbmlzdHAyNTYAAABBBBmo/Yw8pVDSObTkJxlpYL5s9tVnpj7ubeky+PKY2zJ8pRYIHS3XJ6x/NyB/iFoYlGxrn4CaMPwNvYxvSEdTj60AAAAAAAAAAAAAAAIAAAAQaG9zdC5leGFtcGxlLmNvbQAAABQAAAAQaG9zdC5leGFtcGxlLmNvbQAAAABfLFfgAAAAAGEMOkIAAAAAAAAAAAAAAAAAAABoAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBmo/Yw8pVDSObTkJxlpYL5s9tVnpj7ubeky+PKY2zJ8pRYIHS3XJ6x/NyB/iFoYlGxrn4CaMPwNvYxvSEdTj60AAABjAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAABIAAAAIGkErINcPm1MpBhKuUmdR0KAPJGZCSeGT9E6FafcVhlFAAAAIERD5WsflI5QdJETz3n64tIDcdPbUF0GQW8iP8EV+Nf5') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ecdsa-sha2-nistp384-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ecdsa-sha2-nistp384-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAKGVjZHNhLXNoYTItbmlzdHAzODQtY2VydC12MDFAb3BlbnNzaC5jb20AAAAgh+/K6gv7WlwX9qVlKLH8Vurzo5xfc8/glVcT7auQOhIAAAAIbmlzdHAzODQAAABhBDouPHnR+OD4jfdqMbhFXTfB8vTjpZYLQSl0HxEXRAs8AgqDEZI1lJEVwdxtJUbczyu1Wj7wM45YpSpgUQVU38rmVkpxujqhhMMmqMWf87gnjm9oVLLFvJHdauKNnXjJQQAAAAAAAAAAAAAAAgAAABBob3N0LmV4YW1wbGUuY29tAAAAFAAAABBob3N0LmV4YW1wbGUuY29tAAAAAF8sWnQAAAAAYQw85wAAAAAAAAAAAAAAAAAAAIgAAAATZWNkc2Etc2hhMi1uaXN0cDM4NAAAAAhuaXN0cDM4NAAAAGEEOi48edH44PiN92oxuEVdN8Hy9OOllgtBKXQfERdECzwCCoMRkjWUkRXB3G0lRtzPK7VaPvAzjlilKmBRBVTfyuZWSnG6OqGEwyaoxZ/zuCeOb2hUssW8kd1q4o2deMlBAAAAgwAAABNlY2RzYS1zaGEyLW5pc3RwMzg0AAAAaAAAADBJccfmOaYjNVbqkx0X7cLpl53EzTAMdv9k159mBLYaepMnLYmhKx+LvfA5bAUTar4AAAAwSO7n770NIdhhMZjGio4GKDyKq2WW6QLRXleY6QcynBaQ90rkMVnt+jeIEs30h6F8') }.not_to raise_error # rubocop:disable Metrics/LineLength
+      end
+      # rubocop:enable Metrics/LineLength
+
+      # rubocop:disable Metrics/LineLength
+      it 'supports a valid ecdsa-sha2-nistp521-cert-v01@openssh.com key' do
+        expect { described_class.new(name: 'bastelfreakwashere', type: :'ecdsa-sha2-nistp521-cert-v01@openssh.com', user: 'opensshrulez', key: 'AAAAKGVjZHNhLXNoYTItbmlzdHA1MjEtY2VydC12MDFAb3BlbnNzaC5jb20AAAAg2xMe+Z9AuETNwM88pTDRpEtKbGRarajtZ5UaxSmmaQoAAAAIbmlzdHA1MjEAAACFBAFGg1vGsCq5kEzivd0s/kf0x5/TDzb0DwPzGz5YRsUtDlhT7+F7r2lVRvEEXCagc/UjTisIQ0kcG4IgMoI3VsaFEAHrBgF4whI/bhh6i+WzIHnT3NWkjqhdX+kLBXtlm+uFXyslmFlda4gGmjGeHvsDHgC2rN7cSuGh//3DBXtelkB+uQAAAAAAAAAAAAAAAgAAABBob3N0LmV4YW1wbGUuY29tAAAAFAAAABBob3N0LmV4YW1wbGUuY29tAAAAAF8sW9wAAAAAYQw+QgAAAAAAAAAAAAAAAAAAAKwAAAATZWNkc2Etc2hhMi1uaXN0cDUyMQAAAAhuaXN0cDUyMQAAAIUEAUaDW8awKrmQTOK93Sz+R/THn9MPNvQPA/MbPlhGxS0OWFPv4XuvaVVG8QRcJqBz9SNOKwhDSRwbgiAygjdWxoUQAesGAXjCEj9uGHqL5bMgedPc1aSOqF1f6QsFe2Wb64VfKyWYWV1riAaaMZ4e+wMeALas3txK4aH//cMFe16WQH65AAAApwAAABNlY2RzYS1zaGEyLW5pc3RwNTIxAAAAjAAAAEIA92a8QL5J/EMxRaKh9fSysTaEyyN/3KesBC8tI1rwytKILtfrcAIGxXtDQF6eZ72BWUvu6aqHIM6pmIHlnpzsROgAAABCAJHPzoeANenL8ZdlEf0jz8aEiGlGt02Z+vzsajQakKclFL4P8Nm5fojR2Mo2C45CQfO+kfkRQM1UUfDrVZcPzN0S') }.not_to raise_error # rubocop:disable Metrics/LineLength
       end
       # rubocop:enable Metrics/LineLength
 
