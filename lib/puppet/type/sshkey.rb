@@ -12,6 +12,8 @@ module Puppet
       "#{self[:name]}@#{self[:type]}"
     end
 
+    alias_method :title, :name
+
     def self.parameters_to_include
       [:name, :type]
     end

@@ -81,5 +81,10 @@ describe Puppet::Type.type(:sshkey) do
         described_class.new(name: 'host,host.domain,ip')
       }.to raise_error(Puppet::Error, %r{No comma in resourcename})
     end
+
+    it 'aliases :title to :name' do
+      key = described_class.new(name: 'foo', type: :rsa)
+      expect(key.name).to eq key.title
+    end
   end
 end
