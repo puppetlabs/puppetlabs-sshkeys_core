@@ -77,6 +77,8 @@ Style/SymbolArray:
   EnforcedStyle: brackets
 RSpec/NamedSubject:
   Enabled: false
+RSpec/SubjectStub:
+  Enabled: false
 Style/Documentation:
   Exclude:
   - lib/puppet/parser/functions/**/*

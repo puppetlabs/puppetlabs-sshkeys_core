@@ -25,7 +25,7 @@ describe Puppet::Type.type(:user) do
   end
 
   before :each do
-    described_class.stubs(:defaultprovider).returns provider_class
+    allow(described_class).to receive(:defaultprovider).and_return provider_class
   end
 
   describe 'when purging ssh keys' do
@@ -58,7 +58,7 @@ describe Puppet::Type.type(:user) do
     if Puppet.version.start_with?('6')
       context 'with no home directory specified' do
         before(:each) do
-          Dir.stubs(:home).with('a').returns('/home/a')
+          allow(Dir).to receive(:home).with('a').and_return('/home/a')
         end
 
         it 'does accept true' do
@@ -83,7 +83,7 @@ describe Puppet::Type.type(:user) do
       end
 
       before(:each) do
-        Dir.stubs(:home).with('test').returns('/home/test')
+        allow(Dir).to receive(:home).with('test').and_return('/home/test')
       end
 
       let(:paths) do
@@ -91,13 +91,13 @@ describe Puppet::Type.type(:user) do
       end
 
       it 'does not just return from generate' do
-        subject.expects :find_unmanaged_keys
+        expect(subject).to receive(:find_unmanaged_keys)
         subject.generate
       end
 
       it 'checks each keyfile for readability' do
         paths.each do |path|
-          File.expects(:readable?).with(path)
+          expect(File).to receive(:readable?).with(path)
         end
         subject.generate
       end
@@ -111,7 +111,7 @@ describe Puppet::Type.type(:user) do
       end
 
       before(:each) do
-        Dir.stubs(:home).with('test_user_name').returns('/home/test_user_name')
+        allow(Dir).to receive(:home).with('test_user_name').and_return('/home/test_user_name')
       end
 
       context 'when purging is disabled' do

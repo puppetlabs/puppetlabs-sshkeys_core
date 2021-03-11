@@ -48,7 +48,7 @@ module PuppetSpec::Compiler
 
   def apply_with_error_check(manifest)
     apply_compiled_manifest(manifest) do |res|
-      res.expects(:err).never
+      expect(res).to receive(:err).never
     end
   end
 

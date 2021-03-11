@@ -12,10 +12,9 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
 
   before :each do
     # Don't backup to filebucket
-    Puppet::FileBucket::Dipper.any_instance.stubs(:backup) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Puppet::FileBucket::Dipper).to receive(:backup) # rubocop:disable RSpec/AnyInstance
     # We don't want to execute anything
-    described_class.stubs(:filetype)
-                   .returns Puppet::Util::FileType::FileTypeFlat
+    allow(described_class).to receive(:filetype).and_return Puppet::Util::FileType::FileTypeFlat
 
     FileUtils.cp(my_fixture('sample'), sshkey_file)
   end
@@ -188,11 +187,9 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
     it 'fetches an entry from resources' do
       resource_app = Puppet::Application[:resource]
       resource_app.preinit
-      resource_app.command_line
-                  .stubs(:args)
-                  .returns([type_under_test, sshkey_name, "target=#{sshkey_file}"])
+      allow(resource_app.command_line).to receive(:args).and_return([type_under_test, sshkey_name, "target=#{sshkey_file}"])
 
-      resource_app.expects(:puts).with do |args|
+      expect(resource_app).to receive(:puts) do |args|
         expect(args).to match(%r{#{sshkey_name}})
       end
       resource_app.main
