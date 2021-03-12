@@ -4,12 +4,12 @@ describe Puppet::Type.type(:ssh_authorized_key), unless: Puppet.features.microso
   include PuppetSpec::Files
 
   before(:each) do
-    provider_class = stub 'provider_class', name: 'fake', suitable?: true, supports_parameter?: true
-    described_class.stubs(:defaultprovider).returns(provider_class)
-    described_class.stubs(:provider).returns(provider_class)
+    provider_class = class_double('Puppet::Provider::SshAuthorizedKey', name: 'fake', suitable?: true, supports_parameter?: true)
+    allow(described_class).to receive(:defaultprovider).and_return(provider_class)
+    allow(described_class).to receive(:provider).and_return(provider_class)
 
-    provider = stub 'provider', class: provider_class, file_path: make_absolute('/tmp/whatever'), clear: nil
-    provider_class.stubs(:new).returns(provider)
+    provider = instance_double('Puppet::Provider::SshAuthorizedKey', class: provider_class, file_path: make_absolute('/tmp/whatever'), clear: nil)
+    allow(provider_class).to receive(:new).and_return(provider)
   end
 
   it 'has :name as its namevar' do
