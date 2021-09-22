@@ -43,6 +43,12 @@
     },
     {
       "operatingsystem": "windows"
+    },
+    {
+      "operatingsystem": "Rocky"
+    },
+    {
+      "operatingsystem": "AlmaLinux"
     }
   ],
   "requirements": [
