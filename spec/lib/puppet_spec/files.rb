@@ -13,7 +13,7 @@ module PuppetSpec::Files
       begin
         allow(Dir).to receive(:entries).and_call_original
         FileUtils.rm_rf path, secure: true
-      rescue Errno::ENOENT # rubocop:disable Lint/HandleExceptions
+      rescue Errno::ENOENT
         # nothing to do
       end
     end

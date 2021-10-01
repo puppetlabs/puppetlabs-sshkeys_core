@@ -65,7 +65,7 @@ RSpec.context 'ssh_authorized_key: Create' do
               'drop_privileges=false',
               "target=/home/testuser/tmp/ssh_authorized_keys_#{name}/authorized_keys_#{name}"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args)) do |_res|
-        fail_test unless stderr =~ %r{the target path is not trusted}
+        fail_test unless %r{the target path is not trusted}.match?(stderr)
       end
       on(agent, "rm -rf #{custom_key_directory}")
 
@@ -81,7 +81,7 @@ RSpec.context 'ssh_authorized_key: Create' do
               'drop_privileges=false',
               "target='#{custom_key}'"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args), acceptable_exit_codes: [0, 1]) do |_res|
-        fail_test unless stderr =~ %r{the target path is not trusted}
+        fail_test unless %r{the target path is not trusted}.match?(stderr)
       end
     end
   end

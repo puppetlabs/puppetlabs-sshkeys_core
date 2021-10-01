@@ -12,23 +12,23 @@ describe Puppet::Type.type(:ssh_authorized_key).provider(:parsed), unless: Puppe
     tmpfile('authorized_keys.root')
   end
 
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   let :sample_rsa_keys do
     [
       'AAAAB3NzaC1yc2EAAAADAQABAAAAgQCi18JBZOq10X3w4f67nVhO0O3s5Y1vHH4UgMSM3ZnQwbC5hjGyYSi9UULOoQQoQynI/a0I9NL423/Xk/XJVIKCHcS8q6V2Wmjd+fLNelOjxxoW6mbIytEt9rDvwgq3Mof3/m21L3t2byvegR00a+ikKbmInPmKwjeWZpexCIsHzQ==', # 1024 bit
       'AAAAB3NzaC1yc2EAAAADAQABAAAAgQDLClyvi3CsJw5Id6khZs2/+s11qOH4Gdp6iDioDsrIp0m8kSiPr71VGyQYAfPzzvHemHS7Xg0NkG1Kc8u9tRqBQfTvz7ubq0AT/g01+4P2hQ/soFkuwlUG/HVnnaYb6N0Qp5SHWvD5vBE2nFFQVpP5GrSctPtHSjzJq/i+6LYhmQ==', # 1024 bit
-      'AAAAB3NzaC1yc2EAAAADAQABAAABAQDLygAO6txXkh9FNV8xSsBkATeqLbHzS7sFjGI3gt0Dx6q3LjyKwbhQ1RLf28kd5G6VWiXmClU/RtiPdUz8nrGuun++2mrxzrXrvpR9dq1lygLQ2wn2cI35dN5bjRMtXy3decs6HUhFo9MoNwX250rUWfdCyNPhGIp6OOfmjdy+UeLGNxq9wDx6i4bT5tVVSqVRtsEfw9+ICXchzl85QudjneVVpP+thriPZXfXA5eaGwAo/dmoKOIhUwF96gpdLqzNtrGQuxPbV80PTbGv9ZtAtTictxaDz8muXO7he9pXmchUpxUKtMFjHkL0FAZ9tRPmv3RA30sEr2fZ8+LKvnE50w0' # 2048 Bit
+      'AAAAB3NzaC1yc2EAAAADAQABAAABAQDLygAO6txXkh9FNV8xSsBkATeqLbHzS7sFjGI3gt0Dx6q3LjyKwbhQ1RLf28kd5G6VWiXmClU/RtiPdUz8nrGuun++2mrxzrXrvpR9dq1lygLQ2wn2cI35dN5bjRMtXy3decs6HUhFo9MoNwX250rUWfdCyNPhGIp6OOfmjdy+UeLGNxq9wDx6i4bT5tVVSqVRtsEfw9+ICXchzl85QudjneVVpP+thriPZXfXA5eaGwAo/dmoKOIhUwF96gpdLqzNtrGQuxPbV80PTbGv9ZtAtTictxaDz8muXO7he9pXmchUpxUKtMFjHkL0FAZ9tRPmv3RA30sEr2fZ8+LKvnE50w0', # 2048 Bit
     ]
   end
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
 
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   let :sample_dsa_keys do
     [
-      'AAAAB3NzaC1kc3MAAACBAOPck2O8MIDSqxPSnvENt6tzRrKJ5oOhB6Nc6oEcWm+VEH1gvuxdiRqwoMgRwyEf1yUd+UAcLw3a6Jn+EtFyEBN/5WF+4Tt4xTxZ0Pfik2Wc5uqHbQ2dkmOoXiAOYPiD3JUQ1Xwm/J0CgetjitoLfzAGdCNhMqguqAuHcVJ78ZZbAAAAFQCIBKFYZ+I18I+dtgteirXh+VVEEwAAAIEAs1yvQ/wnLLrRCM660pF4kBiw3D6dJfMdCXWQpn0hZmkBQSIzZv4Wuk3giei5luxscDxNc+y3CTXtnyG4Kt1Yi2sOdvhRI3rX8tD+ejn8GHazM05l5VIo9uu4AQPIE32iV63IqgApSBbJ6vDJW91oDH0J492WdLCar4BS/KE3cRwAAACBAN0uSDyJqYLRsfYcFn4HyVf6TJxQm1IcwEt6GcJVzgjri9VtW7FqY5iBqa9B9Zdh5XXAYJ0XLsWQCcrmMHM2XGHGpA4gL9VlCJ/0QvOcXxD2uK7IXwAVUA7g4V4bw8EVnFv2Flufozhsp+4soo1xiYc5jiFVHwVlk21sMhAtKAeF' # 1024 Bit
+      'AAAAB3NzaC1kc3MAAACBAOPck2O8MIDSqxPSnvENt6tzRrKJ5oOhB6Nc6oEcWm+VEH1gvuxdiRqwoMgRwyEf1yUd+UAcLw3a6Jn+EtFyEBN/5WF+4Tt4xTxZ0Pfik2Wc5uqHbQ2dkmOoXiAOYPiD3JUQ1Xwm/J0CgetjitoLfzAGdCNhMqguqAuHcVJ78ZZbAAAAFQCIBKFYZ+I18I+dtgteirXh+VVEEwAAAIEAs1yvQ/wnLLrRCM660pF4kBiw3D6dJfMdCXWQpn0hZmkBQSIzZv4Wuk3giei5luxscDxNc+y3CTXtnyG4Kt1Yi2sOdvhRI3rX8tD+ejn8GHazM05l5VIo9uu4AQPIE32iV63IqgApSBbJ6vDJW91oDH0J492WdLCar4BS/KE3cRwAAACBAN0uSDyJqYLRsfYcFn4HyVf6TJxQm1IcwEt6GcJVzgjri9VtW7FqY5iBqa9B9Zdh5XXAYJ0XLsWQCcrmMHM2XGHGpA4gL9VlCJ/0QvOcXxD2uK7IXwAVUA7g4V4bw8EVnFv2Flufozhsp+4soo1xiYc5jiFVHwVlk21sMhAtKAeF', # 1024 Bit
     ]
   end
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
 
   let :sample_lines do
     [

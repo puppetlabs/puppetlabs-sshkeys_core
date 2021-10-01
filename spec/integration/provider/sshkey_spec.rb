@@ -130,7 +130,7 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
       'ed25519-sk' => 'sk-ssh-ed25519@openssh.com',
     }
     types.each do |type|
-      it "should update an entry with #{type} type" do
+      it "updates an entry with #{type} type" do
         manifest = "#{type_under_test} { '#{sshkey_name}':
         ensure => 'present',
         type   => '#{type}',
