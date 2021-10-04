@@ -2,16 +2,17 @@ require 'puppet/parameter/boolean'
 
 module Puppet
   Type.newtype(:ssh_authorized_key) do
-    @doc = "Manages SSH authorized keys. Currently only type 2 keys are supported.
+    @doc = "@summary Manages SSH authorized keys. Currently only type 2 keys are supported.
 
       In their native habitat, SSH keys usually appear as a single long line, in
       the format `<TYPE> <KEY> <NAME/COMMENT>`. This resource type requires you
-      to split that line into several attributes. Thus, a key that appears in
-      your `~/.ssh/id_rsa.pub` file like this...
+      to split that line into several attributes.
+
+      @example Thus, a key that appears in your `~/.ssh/id_rsa.pub` file like this...
 
           ssh-rsa AAAAB3Nza[...]qXfdaQ== nick@magpie.example.com
 
-      ...would translate to the following resource:
+      @example ...would translate to the following resource:
 
           ssh_authorized_key { 'nick@magpie.example.com':
             ensure => present,
@@ -21,8 +22,9 @@ module Puppet
           }
 
       To ensure that only the currently approved keys are present, you can purge
-      unmanaged SSH keys on a per-user basis. Do this with the `user` resource
-      type's `purge_ssh_keys` attribute:
+      unmanaged SSH keys on a per-user basis.
+
+      @example Do this with the `user` resource type's `purge_ssh_keys` attribute:
 
           user { 'nick':
             ensure         => present,
@@ -86,7 +88,7 @@ module Puppet
           the `name` attribute/resource title."
 
       validate do |value|
-        raise Puppet::Error, _('Key must not contain whitespace: %{value}') % { value: value } if value =~ %r{\s}
+        raise Puppet::Error, _('Key must not contain whitespace: %{value}') % { value: value } if %r{\s}.match?(value)
       end
     end
 
@@ -110,10 +112,10 @@ module Puppet
         return nil unless resource[:user]
 
         begin
-          return File.expand_path("~#{resource[:user]}/.ssh/authorized_keys")
+          File.expand_path("~#{resource[:user]}/.ssh/authorized_keys")
         rescue
           Puppet.debug 'The required user is not yet present on the system'
-          return nil
+          nil
         end
       end
 
@@ -169,7 +171,7 @@ module Puppet
             sk-ecdsa-sha2-nistp256@openssh.com|sk-ssh-ed25519@openssh.com|
             ssh-rsa-cert-v01@openssh.com|ssh-ed25519-cert-v01@openssh.com|
             ssh-dss-cert-v01@openssh.com|ecdsa-sha2-nistp256-cert-v01@openssh.com|
-            ecdsa-sha2-nistp384-cert-v01@openssh.com|ecdsa-sha2-nistp521-cert-v01@openssh.com)\s+([^ ]+)\s*(.*)$}x
+            ecdsa-sha2-nistp384-cert-v01@openssh.com|ecdsa-sha2-nistp521-cert-v01@openssh.com)\s+([^ ]+)\s*(.*)$}x.freeze
     def self.keyline_regex
       REGEX
     end

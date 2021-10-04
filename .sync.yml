@@ -1,41 +1,8 @@
 ---
-Gemfile:
-  optional:
-    ':development':
-      - gem: 'github_changelog_generator'
-        git: 'https://github.com/skywinder/github-changelog-generator'
-        ref: '20ee04ba1234e9e83eb2ffb5056e23d641c7a018'
-        condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.2.2')"
-  required:
-    ':system_tests':
-      - gem: 'puppet-module-posix-system-r#{minor_version}'
-        platforms: ruby
-      - gem: 'puppet-module-win-system-r#{minor_version}'
-        platforms:
-          - mswin
-          - mingw
-          - x64_mingw
-      - gem: beaker
-        version: '~> 3.13'
-        from_env: BEAKER_VERSION
-      - gem: beaker-abs
-        from_env: BEAKER_ABS_VERSION
-        version: '~> 0.1'
-      - gem: beaker-pe
-      - gem: beaker-hostgenerator
-        from_env: BEAKER_HOSTGENERATOR_VERSION
-      - gem: beaker-rspec
-        from_env: BEAKER_RSPEC_VERSION
-    ':development':
-      - gem: puppet-strings
-
-Rakefile:
-  changelog_version_tag_pattern: '%s'
-  requires:
-    - puppet-lint/tasks/puppet-lint
-
 .rubocop.yml:
   default_configs:
+    RSpec/SubjectStub:
+      Enabled: false
     RSpec/NamedSubject:
       Enabled: false
     Style/Documentation:
@@ -44,11 +11,35 @@ Rakefile:
         - spec/**/*
         - lib/puppet/type/**
         - lib/puppet/provider/**
+Gemfile:
+  optional:
+    ":development":
+      - gem: beaker
+        version: '~> 4.30'
+        from_env: BEAKER_VERSION
+      - gem: beaker-abs
+        from_env: BEAKER_ABS_VERSION
+        version: '~> 0.9'
+      - gem: beaker-pe
+      - gem: beaker-hostgenerator
+        from_env: BEAKER_HOSTGENERATOR_VERSION
+      - gem: beaker-rspec
+        from_env: BEAKER_RSPEC_VERSION
+      - gem: beaker-puppet
+        from_env: BEAKER_PUPPET_VERSION
+        version: '~> 1.22'
+      - gem: github_changelog_generator
+      - gem: beaker-module_install_helper
+      - gem: beaker-puppet_install_helper
+      - gem: nokogiri
 
+appveyor.yml:
+  delete: true
+.travis.yml:
+  delete: true
+.github/workflows/auto_release.yml:
+  unmanaged: false
+.github/workflows/release.yml:
+  unmanaged: false
 .gitlab-ci.yml:
   delete: true
-
-.travis.yml:
-  remove_includes:
-    - env: PUPPET_GEM_VERSION="~> 4.0" CHECK=parallel_spec
-      rvm: 2.1.9
