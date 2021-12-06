@@ -35,12 +35,12 @@ describe 'Puppet::Type.type(:user) (integration)', unless: Puppet.features.micro
     let(:manifest) { "user { 'root': purge_ssh_keys => '#{tempfile}' }" }
 
     it 'purges authorized ssh keys' do
-      apply_compiled_manifest(manifest)
+      apply_manifest(manifest)
       expect(File.read(tempfile, encoding: Encoding::UTF_8)).not_to match(%r{key-name})
     end
 
     it 'purges keys with spaces in the comment string' do
-      apply_compiled_manifest(manifest)
+      apply_manifest(manifest)
       expect(File.read(tempfile, encoding: Encoding::UTF_8)).not_to match(%r{key name})
     end
 
@@ -66,7 +66,7 @@ describe 'Puppet::Type.type(:user) (integration)', unless: Puppet.features.micro
       end
 
       it 'purges authorized ssh keys' do
-        apply_compiled_manifest(manifest)
+        apply_manifest(manifest)
         expect(File.read(tempfile, encoding: Encoding::UTF_8)).not_to match(%r{key-name})
       end
     end
@@ -81,7 +81,7 @@ describe 'Puppet::Type.type(:user) (integration)', unless: Puppet.features.micro
       end
 
       it 'purges authorized ssh keys' do
-        apply_compiled_manifest(manifest)
+        apply_manifest(manifest)
         expect(File.read(tempfile, encoding: Encoding::UTF_8)).not_to match(%r{KEY-DATA})
       end
     end

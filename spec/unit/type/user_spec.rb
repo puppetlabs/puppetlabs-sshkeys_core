@@ -3,6 +3,10 @@
 require 'spec_helper'
 
 describe Puppet::Type.type(:user) do
+  def generate_resources
+    subject.respond_to?(:eval_generate) ? subject.eval_generate : subject.generate
+  end
+
   let(:provider_class) do
     described_class.provide(:simple) do
       has_features :manages_expiry, :manages_password_age, :manages_passwords, :manages_solaris_rbac, :manages_shell
@@ -92,14 +96,14 @@ describe Puppet::Type.type(:user) do
 
       it 'does not just return from generate' do
         expect(subject).to receive(:find_unmanaged_keys)
-        subject.generate
+        generate_resources
       end
 
       it 'checks each keyfile for readability' do
         paths.each do |path|
           expect(File).to receive(:readable?).with(path)
         end
-        subject.generate
+        generate_resources
       end
     end
 
@@ -118,13 +122,13 @@ describe Puppet::Type.type(:user) do
         let(:purge_param) { false }
 
         it 'has an empty generate' do
-          expect(subject.generate).to be_empty
+          expect(generate_resources).to be_empty
         end
       end
 
       context 'when purging is enabled' do
         let(:purge_param) { File.expand_path(my_fixture('authorized_keys')) }
-        let(:resources) { subject.generate }
+        let(:resources) { generate_resources }
 
         it 'contains a resource for each key' do
           names = resources.map { |res| res.name }

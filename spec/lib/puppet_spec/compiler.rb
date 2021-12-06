@@ -28,6 +28,14 @@ module PuppetSpec::Compiler
     graph
   end
 
+  def apply_manifest(manifest_content)
+    manifest_path = file_containing('manifest.pp', manifest_content)
+    apply = Puppet::Application[:apply]
+    apply.command_line.args = [manifest_path]
+
+    expect { apply.run }.to exit_with(0)
+  end
+
   def apply_compiled_manifest(manifest, prioritizer = Puppet::Graph::SequentialPrioritizer.new)
     args = []
     if Puppet.version.to_f < 5.0

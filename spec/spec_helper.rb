@@ -5,6 +5,7 @@ RSpec.configure do |c|
 end
 
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'lib/puppet_spec/matchers'
 require 'rspec-puppet-facts'
 
 require 'spec_helper_local' if File.file?(File.join(File.dirname(__FILE__), 'spec_helper_local.rb'))
@@ -43,6 +44,12 @@ RSpec.configure do |c|
     # by default Puppet runs at warning level
     Puppet.settings[:strict] = :warning
     Puppet.settings[:strict_variables] = true
+
+    if c.mock_framework.framework_name == :rspec
+      allow(Puppet.features).to receive(:root?).and_call_original
+    else
+      Puppet.features.stubs(:root?).and_call_original
+    end
   end
   c.filter_run_excluding(bolt: true) unless ENV['GEM_BOLT']
   c.after(:suite) do
