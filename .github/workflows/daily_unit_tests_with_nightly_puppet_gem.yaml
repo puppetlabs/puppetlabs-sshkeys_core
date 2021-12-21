@@ -4,6 +4,7 @@ name: '[Daily] Unit Tests with nightly Puppet gem'
 on:
   schedule:
     - cron: '0 5 * * 1-5'
+  workflow_dispatch:
 
 jobs:
   daily_unit_tests_with_nightly_puppet_gem:
