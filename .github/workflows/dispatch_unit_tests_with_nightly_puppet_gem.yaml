@@ -6,6 +6,7 @@ on:
     inputs:
       pa_ref:
         description: 'Puppet Agent SHA to use in this run'
+        required: true
 
 jobs:
   set_output_data:
