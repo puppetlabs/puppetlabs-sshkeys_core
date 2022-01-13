@@ -103,8 +103,17 @@ jobs:
 
       - name: Install the latest nightly build of puppet${{ env.puppet_version }} gem
         run: |
-          curl http://nightlies.puppet.com/downloads/gems/puppet${{ env.puppet_version }}-nightly/puppet-${{ needs.set_output_data.outputs.puppet_short_commit }}${{ matrix.gem_file_postfix }} --output puppet.gem
-          gem install puppet.gem -N
+          sleep_time=0
+          until [ $sleep_time -ge 15 ]
+          do
+            curl --location http://nightlies.puppet.com/downloads/gems/puppet${{ matrix.puppet_version }}-nightly/${{ matrix.gem_file }} --output puppet.gem
+            gem install puppet.gem -N && break
+
+            sleep_time=$((sleep_time*2+1))
+            echo "Retrying download and install of gem in $sleep_time seconds..."
+            sleep $sleep_time
+          done
+        shell: bash
 
       - name: Prepare testing environment with bundler
         run: |
