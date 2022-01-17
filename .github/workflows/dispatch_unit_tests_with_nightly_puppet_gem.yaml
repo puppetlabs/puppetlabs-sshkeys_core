@@ -106,7 +106,7 @@ jobs:
           sleep_time=0
           until [ $sleep_time -ge 15 ]
           do
-            curl --location http://nightlies.puppet.com/downloads/gems/puppet${{ env.puppet_version }}-nightly/${{ matrix.gem_file_postfix }} --output puppet.gem
+            curl --location http://nightlies.puppet.com/downloads/gems/puppet${{ env.puppet_version }}-nightly/puppet-${{ needs.set_output_data.outputs.puppet_short_commit }}${{ matrix.gem_file_postfix }} --output puppet.gem
             gem install puppet.gem -N && break
 
             sleep_time=$((sleep_time*2+1))
