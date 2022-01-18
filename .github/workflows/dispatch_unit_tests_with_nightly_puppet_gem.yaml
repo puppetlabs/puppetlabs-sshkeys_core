@@ -130,10 +130,18 @@ jobs:
   notify-via-slack:
     name: Notify workflow conclusion via Slack
     if: ${{ always() }}
-    needs: unit_tests_with_nightly_puppet_gem
+    needs: [set_output_data, unit_tests_with_nightly_puppet_gem]
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: luchihoratiu/notify-via-slack@main
+      - uses: luchihoratiu/notify-via-slack@v1.0.0
         with:
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          NOTIFY_ONLY_ON_CONCLUSION_CHANGE: 'true'
+          EXTRA_INFORMATION: ':github_actions: Run number: ${{ github.run_id }} \n
+                              :puppet: Puppet Agent SHA: ${{ github.event.inputs.pa_ref }} \n
+                              :puppet: Puppet SHA: ${{ needs.set_output_data.outputs.puppet_sha }} \n
+                              :puppet: Puppet Short Commit: ${{ needs.set_output_data.outputs.puppet_short_commit }} \n
+                              :puppet: Puppet Version: ${{ needs.set_output_data.outputs.puppet_version }} \n
+                              :ruby: Ruby Version: ${{ needs.set_output_data.outputs.ruby_version }} \n'
+
