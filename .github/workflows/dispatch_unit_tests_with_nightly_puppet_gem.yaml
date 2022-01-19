@@ -104,7 +104,7 @@ jobs:
       - name: Install the latest nightly build of puppet${{ env.puppet_version }} gem
         run: |
           sleep_time=0
-          until [ $sleep_time -ge 15 ]
+          until [ $sleep_time -ge 511 ]
           do
             curl --location http://nightlies.puppet.com/downloads/gems/puppet${{ env.puppet_version }}-nightly/puppet-${{ needs.set_output_data.outputs.puppet_short_commit }}${{ matrix.gem_file_postfix }} --output puppet.gem
             gem install puppet.gem -N && break
