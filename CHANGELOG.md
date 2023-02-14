@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v2.4.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v2.4.0) (2023-02-14)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v2.3.0...v2.4.0)
+
+### Added
+
+- \(MODULES-11371\) Updates PDK template [\#67](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/67) ([mhashizume](https://github.com/mhashizume))
+
 ## [v2.3.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v2.3.0) (2021-10-04)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/2.2.0...v2.3.0)
