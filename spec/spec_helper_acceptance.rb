@@ -1,6 +1,7 @@
 require 'beaker-rspec'
 require 'beaker/module_install_helper'
 require 'beaker/puppet_install_helper'
+require 'voxpupuli/acceptance/spec_helper_acceptance'
 
 def beaker_opts
   { debug: true, trace: true, expect_failures: true, acceptable_exit_codes: (0...256) }
