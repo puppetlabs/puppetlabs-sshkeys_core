@@ -125,22 +125,22 @@ will autorequire this user if it is being managed as a `user` resource.
 
 The following parameters are available in the `ssh_authorized_key` type.
 
-* [`drop_privileges`](#drop_privileges)
-* [`name`](#name)
-* [`provider`](#provider)
+* [`drop_privileges`](#-ssh_authorized_key--drop_privileges)
+* [`name`](#-ssh_authorized_key--name)
+* [`provider`](#-ssh_authorized_key--provider)
 
-##### <a name="drop_privileges"></a>`drop_privileges`
+##### <a name="-ssh_authorized_key--drop_privileges"></a>`drop_privileges`
 
-Valid values: ``true``, ``false``, `yes`, `no`
+Valid values: `true`, `false`, `yes`, `no`
 
 Whether to drop privileges when writing the key file. This is
 useful for creating files in paths not writable by the target user. Note
 the possible security implications of managing file ownership and
 permissions as a privileged user.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="name"></a>`name`
+##### <a name="-ssh_authorized_key--name"></a>`name`
 
 namevar
 
@@ -151,7 +151,7 @@ Due to internal limitations, this must be unique across all user accounts;
 if you want to specify one key for multiple users, you must use a different
 comment for each instance.
 
-##### <a name="provider"></a>`provider`
+##### <a name="-ssh_authorized_key--provider"></a>`provider`
 
 The specific backend to use for this `ssh_authorized_key` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
@@ -201,22 +201,22 @@ the `parsed` provider.
 
 The following parameters are available in the `sshkey` type.
 
-* [`name`](#name)
-* [`provider`](#provider)
-* [`type`](#type)
+* [`name`](#-sshkey--name)
+* [`provider`](#-sshkey--provider)
+* [`type`](#-sshkey--type)
 
-##### <a name="name"></a>`name`
+##### <a name="-sshkey--name"></a>`name`
 
 namevar
 
 The host name that the key is associated with.
 
-##### <a name="provider"></a>`provider`
+##### <a name="-sshkey--provider"></a>`provider`
 
 The specific backend to use for this `sshkey` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
-##### <a name="type"></a>`type`
+##### <a name="-sshkey--type"></a>`type`
 
 Valid values: `ssh-dss`, `ssh-ed25519`, `ssh-rsa`, `ecdsa-sha2-nistp256`, `ecdsa-sha2-nistp384`, `ecdsa-sha2-nistp521`, `sk-ecdsa-sha2-nistp256@openssh.com`, `sk-ssh-ed25519@openssh.com`, `dsa`, `ed25519`, `rsa`, `ecdsa-sk`, `ed25519-sk`
 
