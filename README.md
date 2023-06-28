@@ -33,6 +33,11 @@ ssh_authorized_key { 'nick@magpie.example.com':
 }
 ```
 
+This would create a key that appears in your ~/.ssh/id_rsa.pub file like this with resource name as comment:
+```
+ssh-rsa AAAAB3Nza[...]qXfdaQ== nick@magpie.example.com
+```
+
 To manage a known hosts file entry, use the following code:
 
 ```
