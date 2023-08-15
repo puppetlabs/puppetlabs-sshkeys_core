@@ -42,6 +42,9 @@
       "operatingsystem": "Solaris"
     },
     {
+      "operatingsystem": "windows"
+    },
+    {
       "operatingsystem": "Rocky"
     },
     {
