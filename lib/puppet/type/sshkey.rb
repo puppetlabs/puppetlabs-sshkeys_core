@@ -85,7 +85,7 @@ module Puppet
         if %r{\s}.match?(value)
           raise Puppet::Error, _('Aliases cannot include whitespace')
         end
-        if %r{,}.match?(value)
+        if value.include?(',')
           raise Puppet::Error, _('Aliases must be provided as an array, not a comma-separated list')
         end
       end
