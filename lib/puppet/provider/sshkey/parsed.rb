@@ -33,10 +33,10 @@ Puppet::Type.type(:sshkey).provide(
   end
 
   def self.default_target
-    case Facter.value(:operatingsystem)
+    case Facter.value('os.name')
     when 'Darwin'
       # Versions 10.11 and up use /etc/ssh/ssh_known_hosts
-      version = Facter.value(:macosx_productversion_major)
+      version = Facter.value('os.macosx.version.major')
       if version
         if Puppet::Util::Package.versioncmp(version, '10.11') >= 0
           '/etc/ssh/ssh_known_hosts'
