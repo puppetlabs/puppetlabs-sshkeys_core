@@ -29,9 +29,9 @@ RSpec.context 'ssh_authorized_key: Modify' do
               "key='mynewshinykey'"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args))
 
-      on(agent, "cat #{auth_keys}") do |_res|
-        expect(stdout).to include("mynewshinykey #{name}")
-        expect(stdout).not_to include("mykey #{name}")
+      on(agent, "cat #{auth_keys}") do |res|
+        expect(res.stdout).to include("mynewshinykey #{name}")
+        expect(res.stdout).not_to include("mykey #{name}")
       end
     end
 
@@ -45,9 +45,9 @@ RSpec.context 'ssh_authorized_key: Modify' do
               "target='#{custom_key}'"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args))
 
-      on(agent, "cat #{custom_key}") do |_res|
-        expect(stdout).to include("mynewshinykey #{name}")
-        expect(stdout).not_to include("mykey #{name}")
+      on(agent, "cat #{custom_key}") do |res|
+        expect(res.stdout).to include("mynewshinykey #{name}")
+        expect(res.stdout).not_to include("mykey #{name}")
       end
       on(agent, "rm -rf #{custom_key_directory}")
     end

@@ -65,8 +65,8 @@ CMD
       # expect purging to be idempotent
       apply_manifest_on(agent, purge_manifest, catch_changes: true)
 
-      on(agent, "cat #{ssh_known_hosts}") do |_res|
-        expect(stdout).not_to include('how_about_the_initial')
+      on(agent, "cat #{ssh_known_hosts}") do |res|
+        expect(res.stdout).not_to include('how_about_the_initial')
       end
     end
   end

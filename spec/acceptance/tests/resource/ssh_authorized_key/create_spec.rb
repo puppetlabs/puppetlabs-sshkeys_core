@@ -30,8 +30,8 @@ RSpec.context 'ssh_authorized_key: Create' do
               "key='mykey'"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args))
 
-      on(agent, "cat #{auth_keys}") do |_res|
-        fail_test "didn't find the ssh_authorized_key for #{name}" unless stdout.include? name.to_s
+      on(agent, "cat #{auth_keys}") do |res|
+        fail_test "didn't find the ssh_authorized_key for #{name}" unless res.stdout.include? name.to_s
       end
     end
 
@@ -44,8 +44,8 @@ RSpec.context 'ssh_authorized_key: Create' do
               "target='#{custom_key}'"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args))
 
-      on(agent, "cat #{custom_key}") do |_res|
-        fail_test "didn't find the ssh_authorized_key for #{name}" unless stdout.include? name.to_s
+      on(agent, "cat #{custom_key}") do |res|
+        fail_test "didn't find the ssh_authorized_key for #{name}" unless res.stdout.include? name.to_s
       end
       on(agent, "rm -rf #{custom_key_directory}")
     end
@@ -64,8 +64,8 @@ RSpec.context 'ssh_authorized_key: Create' do
               "key='mykey'",
               'drop_privileges=false',
               "target=/home/testuser/tmp/ssh_authorized_keys_#{name}/authorized_keys_#{name}"]
-      on(agent, puppet_resource('ssh_authorized_key', name.to_s, args)) do |_res|
-        fail_test unless stderr.include?('the target path is not trusted')
+      on(agent, puppet_resource('ssh_authorized_key', name.to_s, args)) do |res|
+        fail_test unless res.stderr.include?('the target path is not trusted')
       end
       on(agent, "rm -rf #{custom_key_directory}")
 
@@ -80,8 +80,8 @@ RSpec.context 'ssh_authorized_key: Create' do
               "key='mykey'",
               'drop_privileges=false',
               "target='#{custom_key}'"]
-      on(agent, puppet_resource('ssh_authorized_key', name.to_s, args), acceptable_exit_codes: [0, 1]) do |_res|
-        fail_test unless stderr.include?('the target path is not trusted')
+      on(agent, puppet_resource('ssh_authorized_key', name.to_s, args), acceptable_exit_codes: [0, 1]) do |res|
+        fail_test unless res.stderr.include?('the target path is not trusted')
       end
     end
   end
