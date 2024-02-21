@@ -31,8 +31,8 @@ RSpec.context 'ssh_authorized_key: Destroy' do
               "key='mykey'"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args))
 
-      on(agent, "cat #{auth_keys}") do |_res|
-        expect(stdout).not_to include(name.to_s)
+      on(agent, "cat #{auth_keys}") do |res|
+        expect(res.stdout).not_to include(name.to_s)
       end
     end
 
@@ -46,8 +46,8 @@ RSpec.context 'ssh_authorized_key: Destroy' do
               "target='#{custom_key}'"]
       on(agent, puppet_resource('ssh_authorized_key', name.to_s, args))
 
-      on(agent, "cat #{custom_key}") do |_res|
-        expect(stdout).not_to include(name.to_s)
+      on(agent, "cat #{custom_key}") do |res|
+        expect(res.stdout).not_to include(name.to_s)
       end
       on(agent, "rm -rf #{custom_key_directory}")
     end
