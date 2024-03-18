@@ -1,8 +1,6 @@
 require 'spec_helper_acceptance'
 
 RSpec.context 'ssh_authorized_key: Destroy' do
-  confine :except, platform: ['windows']
-
   let(:auth_keys) { '~/.ssh/authorized_keys' }
   let(:name) { "pl#{rand(999_999).to_i}" }
   let(:custom_key_directory) { "/etc/ssh_authorized_keys_#{name}" }
