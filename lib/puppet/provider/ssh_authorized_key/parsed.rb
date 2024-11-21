@@ -38,7 +38,11 @@ Puppet::Type.type(:ssh_authorized_key).provide(
     0o700
   end
 
-  def file_perm
+  def file_perm_readonly
+    0o444
+  end
+
+  def file_perm_writable
     0o600
   end
 
@@ -84,7 +88,7 @@ Puppet::Type.type(:ssh_authorized_key).provide(
         end
         super
 
-        File.chmod(file_perm, target)
+        File.chmod(file_perm_writable, target)
       end
     # to avoid race conditions when handling permissions as a privileged user
     # (CVE-2011-3870) we use the trusted_path method to ensure the entire
@@ -97,7 +101,7 @@ Puppet::Type.type(:ssh_authorized_key).provide(
       gid = Puppet::Util.gid(@resource.should(:user))
       File.open(target) do |target|
         target.chown(uid, gid)
-        target.chmod(file_perm)
+        target.chmod(file_perm_readonly)
       end
     end
   end
