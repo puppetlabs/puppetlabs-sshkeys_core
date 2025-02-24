@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v2.5.1](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v2.5.1) - 2025-02-24
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v2.5.0...v2.5.1)
+
+### Fixed
+
+- PE-40175 [#98](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/98) ([taikaa](https://github.com/taikaa))
+
 ## [v2.5.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v2.5.0) - 2024-03-06
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v2.4.0...v2.5.0)
