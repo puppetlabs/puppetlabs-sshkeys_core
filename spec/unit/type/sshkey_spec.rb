@@ -76,6 +76,12 @@ describe Puppet::Type.type(:sshkey) do
       }.to raise_error(Puppet::Error, %r{cannot include whitespace})
     end
 
+    it "doesn't accept leading or trailing whitespace in the key contents" do
+      expect {
+        described_class.new(name: 'foo', key: ' AAAFA==')
+      }.to raise_error(Puppet::Error, %r{Key must contain neither leading nor trailing whitespace})
+    end
+
     it "doesn't accept aliases in the resourcename" do
       expect {
         described_class.new(name: 'host,host.domain,ip')

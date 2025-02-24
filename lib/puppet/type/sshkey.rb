@@ -52,15 +52,16 @@ module Puppet
     end
 
     newproperty(:key) do
-      desc "The key itself; generally a long string of uuencoded characters. The `key`
-        attribute may not contain whitespace.
+      desc "The key itself; generally a long string of unencoded characters. The `key`
+        attribute may not contain leading or trailing whitespace.
 
         Make sure to omit the following in this attribute (and specify them in
         other attributes):
 
-        * Key headers, such as 'ssh-rsa' --- put these in the `type` attribute.
-        * Key identifiers / comments, such as 'joescomputer.local' --- put these in
-          the `name` attribute/resource title."
+        * Key headers, such as 'ssh-rsa' --- put these in the `type` attribute."
+      validate do |value|
+        raise Puppet::Error, _('Key must contain neither leading nor trailing whitespace: %{value}') % { value: value } if %r{^\s|\s$}.match?(value)
+      end
     end
 
     # FIXME: This should automagically check for aliases to the hosts, just
