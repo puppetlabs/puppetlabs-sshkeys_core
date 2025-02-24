@@ -182,15 +182,13 @@ specified as an array.
 
 ##### `key`
 
-The key itself; generally a long string of uuencoded characters. The `key`
-attribute may not contain whitespace.
+The key itself; generally a long string of unencoded characters. The `key`
+attribute may not contain leading or trailing whitespace.
 
 Make sure to omit the following in this attribute (and specify them in
 other attributes):
 
 * Key headers, such as 'ssh-rsa' --- put these in the `type` attribute.
-* Key identifiers / comments, such as 'joescomputer.local' --- put these in
-  the `name` attribute/resource title.
 
 ##### `target`
 
