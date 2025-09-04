@@ -29,7 +29,15 @@ describe Puppet::Type.type(:sshkey) do
       :'ecdsa-sha2-nistp521',
       :'ssh-ed25519', :ed25519,
       :'ecdsa-sk', :'sk-ecdsa-sha2-nistp256@openssh.com',
-      :'ed25519-sk', :'sk-ssh-ed25519@openssh.com'
+      :'ed25519-sk', :'sk-ssh-ed25519@openssh.com',
+      :'@cert-authority ssh-dss', :'@cert-authority dsa',
+      :'@cert-authority ssh-rsa', :'@cert-authority rsa',
+      :'@cert-authority ecdsa-sha2-nistp256',
+      :'@cert-authority ecdsa-sha2-nistp384',
+      :'@cert-authority ecdsa-sha2-nistp521',
+      :'@cert-authority ssh-ed25519', :'@cert-authority ed25519',
+      :'@cert-authority ecdsa-sk', :'@cert-authority sk-ecdsa-sha2-nistp256@openssh.com',
+      :'@cert-authority ed25519-sk', :'@cert-authority sk-ssh-ed25519@openssh.com'
     ].each do |keytype|
       it "supports #{keytype} as a type value" do
         described_class.new(name: 'foo', type: keytype)
@@ -54,6 +62,21 @@ describe Puppet::Type.type(:sshkey) do
     it 'aliases :ed25519-sk to :ssh-dss' do
       key = described_class.new(name: 'foo', type: :'ed25519-sk')
       expect(key.parameter(:type).value).to eq :'sk-ssh-ed25519@openssh.com'
+    end
+
+    it 'aliases :@cert-authority rsa to :@cert-authority ssh-rsa' do
+      key = described_class.new(name: 'foo', type: :'@cert-authority rsa')
+      expect(key.parameter(:type).value).to eq :'@cert-authority ssh-rsa'
+    end
+
+    it 'aliases :@cert-authority dsa to :@cert-authority ssh-dss' do
+      key = described_class.new(name: 'foo', type: :'@cert-authority dsa')
+      expect(key.parameter(:type).value).to eq :'@cert-authority ssh-dss'
+    end
+
+    it 'aliases :@cert-authority ed25519 to :@cert-authority ssh-ed25519' do
+      key = described_class.new(name: 'foo', type: :'@cert-authority ed25519')
+      expect(key.parameter(:type).value).to eq :'@cert-authority ssh-ed25519'
     end
 
     it "doesn't support values other than ssh-dss, ssh-rsa, dsa, rsa for type" do
