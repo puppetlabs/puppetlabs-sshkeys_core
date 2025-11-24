@@ -60,7 +60,7 @@ module Puppet
 
         * Key headers, such as 'ssh-rsa' --- put these in the `type` attribute."
       validate do |value|
-        raise Puppet::Error, _('Key must contain neither leading nor trailing whitespace: %{value}') % { value: value } if %r{^\s|\s$}.match?(value)
+        raise Puppet::Error, _('Key must contain neither leading nor trailing whitespace: %{value}') % ({ value: }) if %r{^\s|\s$}.match?(value)
       end
     end
 
