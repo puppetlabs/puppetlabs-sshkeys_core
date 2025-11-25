@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v3.0.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v3.0.0) - 2025-11-25
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v2.5.1...v3.0.0)
+
+### Other
+
+- (PA-7815) template 3.5.1 updates [#112](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/112) ([tvpartytonight](https://github.com/tvpartytonight))
+- (PA-6856) Add beaker-hostgenerator gem with dynamic version support [#110](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/110) ([skyamgarp](https://github.com/skyamgarp))
+- (PA-7366) Use puppetcore for testing [#106](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/106) ([tvpartytonight](https://github.com/tvpartytonight))
+- (PA-7215) Add Amazonfips as a supported platform [#104](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/104) ([shubhamshinde360](https://github.com/shubhamshinde360))
+
 ## [v2.5.1](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v2.5.1) - 2025-02-24
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v2.5.0...v2.5.1)
