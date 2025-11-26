@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v3.0.1](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v3.0.1) - 2025-11-26
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v3.0.0...v3.0.1)
+
+### Other
+
+- Specify correct supported puppet version, 8.x only [#114](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/114) ([tvpartytonight](https://github.com/tvpartytonight))
+
 ## [v3.0.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v3.0.0) - 2025-11-25
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v2.5.1...v3.0.0)
