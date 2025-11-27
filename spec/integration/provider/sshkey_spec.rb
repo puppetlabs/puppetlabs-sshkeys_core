@@ -195,4 +195,70 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
       resource_app.main
     end
   end
+
+  describe 'cert-authority functionality' do
+    let(:provider_class) { described_class }
+    let(:type) { Puppet::Type.type(:sshkey) }
+
+    describe 'round-trip conversion' do
+      it 'correctly parses and generates cert-authority entries' do
+        # Test parsing a cert-authority line
+        line = '@cert-authority *.example.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzwHhxXvIrtfIwrudFqc8yQcIfMudrgpnuh1F3AV6d2BrLgu/yQE7W5UyJMUjfj427sQudRwKW45O0Jsnr33F4mUw+GIMlAAmp9g24/OcrTiB8ZUKIjoPy/cO4coxGi8/NECtRzpD/ZUPFh6OEpyOwJPMb7/EC2Az6Otw4StHdXUYw22zHazBcPFnv6zCgPx1hA7QlQDWTu4YcL0WmTYQCtMUb3FUqrcFtzGDD0ytosgwSd+JyN5vj5UwIABjnNOHPZ62EY1OFixnfqX/+dUwrFSs5tPgBF/KkC6R7tmbUfnBON6RrGEmu+ajOTOLy23qUZB4CQ53V7nyAWhzqSK+hw=='
+
+        # Parse the line
+        parsed = provider_class.parse_line(line)
+        expect(parsed[:name]).to eq('*.example.com')
+        expect(parsed[:type]).to eq('@cert-authority ssh-rsa')
+        expect(parsed[:key]).to start_with('AAAAB3NzaC1yc2EA')
+
+        # Test generating back to line format
+        generated_line = provider_class.to_line(parsed)
+        expect(generated_line).to eq(line)
+      end
+
+      it 'handles cert-authority entries with host aliases' do
+        line = '@cert-authority *.example.com,*.test.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzwHhxXvIrtfIwrudFqc8yQcIfMudrgpnuh1F3AV6d2BrLgu/yQE7W5UyJMUjfj427sQudRwKW45O0Jsnr33F4mUw+GIMlAAmp9g24/OcrTiB8ZUKIjoPy/cO4coxGi8/NECtRzpD/ZUPFh6OEpyOwJPMb7/EC2Az6Otw4StHdXUYw22zHazBcPFnv6zCgPx1hA7QlQDWTu4YcL0WmTYQCtMUb3FUqrcFtzGDD0ytosgwSd+JyN5vj5UwIABjnNOHPZ62EY1OFixnfqX/+dUwrFSs5tPgBF/KkC6R7tmbUfnBON6RrGEmu+ajOTOLy23qUZB4CQ53V7nyAWhzqSK+hw=='
+
+        parsed = provider_class.parse_line(line)
+        expect(parsed[:name]).to eq('*.example.com')
+        expect(parsed[:host_aliases]).to eq(['*.test.com'])
+        expect(parsed[:type]).to eq('@cert-authority ssh-rsa')
+
+        # Test generating back
+        generated_line = provider_class.to_line(parsed)
+        expect(generated_line).to eq(line)
+      end
+    end
+
+    describe 'resource creation' do
+      it 'can create a cert-authority sshkey resource' do
+        expect {
+          type.new(
+            name: '*.example.com',
+            type: '@cert-authority ssh-rsa',
+            key: 'AAAAB3NzaC1yc2EAAAA'
+          )
+        }.not_to raise_error
+      end
+
+      it 'can create a cert-authority resource with aliases' do
+        expect {
+          type.new(
+            name: '*.example.com',
+            type: '@cert-authority rsa', # Test alias
+            key: 'AAAAB3NzaC1yc2EAAAA'
+          )
+        }.not_to raise_error
+      end
+
+      it 'aliases cert-authority key types correctly' do
+        resource = type.new(
+          name: '*.example.com',
+          type: '@cert-authority rsa', # Alias
+          key: 'AAAAB3NzaC1yc2EAAAA'
+        )
+        expect(resource[:type]).to eq(:'@cert-authority ssh-rsa')
+      end
+    end
+  end
 end

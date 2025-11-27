@@ -38,6 +38,20 @@ describe 'sshkey parsed provider' do
     expect(subject.parse_line('test ssh-rsa ' + key)[:host_aliases]).to eq([])
   end
 
+  it 'parses cert-authority entries correctly' do
+    result = subject.parse_line('@cert-authority *.example.com ssh-rsa ' + key)
+    expect(result[:name]).to eq('*.example.com')
+    expect(result[:type]).to eq('@cert-authority ssh-rsa')
+    expect(result[:key]).to eq(key)
+  end
+
+  it 'parses cert-authority entries with host aliases' do
+    result = subject.parse_line('@cert-authority *.example.com,*.test.com ssh-rsa ' + key)
+    expect(result[:name]).to eq('*.example.com')
+    expect(result[:host_aliases]).to eq(['*.test.com'])
+    expect(result[:type]).to eq('@cert-authority ssh-rsa')
+  end
+
   context 'with the sample file' do
     ['sample', 'sample_with_blank_lines'].each do |sample_file|
       let(:fixture) { my_fixture(sample_file) }

@@ -37,18 +37,30 @@ module Puppet
     end
 
     newparam(:type) do
-      desc 'The encryption type used.  Probably ssh-dss or ssh-rsa.'
+      desc 'The encryption type used.  Probably ssh-dss or ssh-rsa.
+        For certificate authorities, use @cert-authority followed by the key type,
+        e.g., @cert-authority ssh-rsa. This will create an entry in the known_hosts
+        file formatted as "@cert-authority hostname keytype key" which allows SSH
+        to validate host certificates signed by the specified certificate authority.'
 
       isnamevar
 
       newvalues :'ssh-dss', :'ssh-ed25519', :'ssh-rsa', :'ecdsa-sha2-nistp256', :'ecdsa-sha2-nistp384', :'ecdsa-sha2-nistp521',
-                :'sk-ecdsa-sha2-nistp256@openssh.com', :'sk-ssh-ed25519@openssh.com'
+                :'sk-ecdsa-sha2-nistp256@openssh.com', :'sk-ssh-ed25519@openssh.com',
+                :'@cert-authority ssh-dss', :'@cert-authority ssh-ed25519', :'@cert-authority ssh-rsa',
+                :'@cert-authority ecdsa-sha2-nistp256', :'@cert-authority ecdsa-sha2-nistp384', :'@cert-authority ecdsa-sha2-nistp521',
+                :'@cert-authority sk-ecdsa-sha2-nistp256@openssh.com', :'@cert-authority sk-ssh-ed25519@openssh.com'
 
       aliasvalue(:dsa, :'ssh-dss')
       aliasvalue(:ed25519, :'ssh-ed25519')
       aliasvalue(:rsa, :'ssh-rsa')
       aliasvalue(:'ecdsa-sk', :'sk-ecdsa-sha2-nistp256@openssh.com')
       aliasvalue(:'ed25519-sk', :'sk-ssh-ed25519@openssh.com')
+      aliasvalue(:'@cert-authority dsa', :'@cert-authority ssh-dss')
+      aliasvalue(:'@cert-authority ed25519', :'@cert-authority ssh-ed25519')
+      aliasvalue(:'@cert-authority rsa', :'@cert-authority ssh-rsa')
+      aliasvalue(:'@cert-authority ecdsa-sk', :'@cert-authority sk-ecdsa-sha2-nistp256@openssh.com')
+      aliasvalue(:'@cert-authority ed25519-sk', :'@cert-authority sk-ssh-ed25519@openssh.com')
     end
 
     newproperty(:key) do
