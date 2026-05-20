@@ -69,7 +69,7 @@ end
 group :development, :release_prep do
   gem "puppet-strings", '~> 4.0',         require: false
   gem "puppetlabs_spec_helper", '~> 8.0', require: false
-  gem "puppet-blacksmith", '~> 7.0',      require: false
+  gem "puppet-blacksmith", '~> 8.0',      require: false
 end
 group :system_tests do
   gem "puppet_litmus", '~> 2.0',   require: false, platforms: [:ruby, :x64_mingw] if !ENV['PUPPET_FORGE_TOKEN'].to_s.empty?
