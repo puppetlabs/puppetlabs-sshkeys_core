@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-sshkeys_core",
-  "version": "2.4.0",
+  "version": "3.0.1",
   "author": "puppetlabs",
   "summary": "Manage SSH authorized keys, and known hosts.",
   "license": "Apache-2.0",
@@ -49,15 +49,18 @@
     },
     {
       "operatingsystem": "Amazon"
+    },
+    {
+      "operatingsystem": "Amazonfips"
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
-  "pdk-version": "3.0.1",
-  "template-url": "https://github.com/puppetlabs/pdk-templates#3.0.1",
-  "template-ref": "tags/3.0.1-0-gd13288a"
+  "pdk-version": "3.5.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#3.5.1",
+  "template-ref": "tags/3.5.1-0-g9d5b193"
 }

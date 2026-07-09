@@ -57,9 +57,9 @@ CMD
               "key='how_about_the_updated_rsa_key_of_c'"]
       on(agent, puppet_resource('sshkey', keyname.to_s, args))
 
-      on(agent, "cat #{ssh_known_hosts}") do |_res|
-        expect(stdout).to include('how_about_the_updated_rsa_key_of_c')
-        expect(stdout).not_to include('how_about_the_initial_rsa_key_of_c')
+      on(agent, "cat #{ssh_known_hosts}") do |res|
+        expect(res.stdout).to include('how_about_the_updated_rsa_key_of_c')
+        expect(res.stdout).not_to include('how_about_the_initial_rsa_key_of_c')
       end
     end
 
@@ -69,9 +69,9 @@ CMD
               "key='how_about_the_updated_dss_key_of_c'"]
       on(agent, puppet_resource('sshkey', keyname.to_s, args))
 
-      on(agent, "cat #{ssh_known_hosts}") do |_res|
-        expect(stdout).to include('how_about_the_updated_dss_key_of_c')
-        expect(stdout).not_to include('how_about_the_initial_dss_key_of_c')
+      on(agent, "cat #{ssh_known_hosts}") do |res|
+        expect(res.stdout).to include('how_about_the_updated_dss_key_of_c')
+        expect(res.stdout).not_to include('how_about_the_initial_dss_key_of_c')
       end
     end
   end

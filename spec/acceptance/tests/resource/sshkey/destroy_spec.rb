@@ -56,8 +56,8 @@ CMD
               "type='rsa'"]
       on(agent, puppet_resource('sshkey', keyname.to_s, args))
 
-      on(agent, "cat #{ssh_known_hosts}") do |_res|
-        expect(stdout).not_to include('how_about_the_initial_rsa_key_of_c')
+      on(agent, "cat #{ssh_known_hosts}") do |res|
+        expect(res.stdout).not_to include('how_about_the_initial_rsa_key_of_c')
       end
     end
 
@@ -66,8 +66,8 @@ CMD
               "type='ssh-dss'"]
       on(agent, puppet_resource('sshkey', keyname.to_s, args))
 
-      on(agent, "cat #{ssh_known_hosts}") do |_res|
-        expect(stdout).not_to include('how_about_the_initial_dss_key_of_c')
+      on(agent, "cat #{ssh_known_hosts}") do |res|
+        expect(res.stdout).not_to include('how_about_the_initial_dss_key_of_c')
       end
     end
   end

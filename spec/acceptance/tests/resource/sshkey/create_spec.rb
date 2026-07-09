@@ -66,8 +66,8 @@ RSpec.context 'sshkeys: Create' do
       ]
       on(agent, puppet_resource('sshkey', keyname.to_s, args))
 
-      on(agent, "cat #{ssh_known_hosts}") do |_rc|
-        expect(stdout).to include(keyname.to_s)
+      on(agent, "cat #{ssh_known_hosts}") do |res|
+        expect(res.stdout).to include(keyname.to_s)
       end
     end
   end
@@ -98,9 +98,9 @@ RSpec.context 'sshkeys: Create' do
       }
 MANIFEST
 
-      on(agent, "cat #{ssh_known_hosts}") do |_rc|
-        expect(stdout).to include("#{keyname} ssh-rsa")
-        expect(stdout).to include("#{keyname} ssh-dss")
+      on(agent, "cat #{ssh_known_hosts}") do |res|
+        expect(res.stdout).to include("#{keyname} ssh-rsa")
+        expect(res.stdout).to include("#{keyname} ssh-dss")
       end
     end
   end

@@ -88,7 +88,7 @@ module Puppet
           the `name` attribute/resource title."
 
       validate do |value|
-        raise Puppet::Error, _('Key must not contain whitespace: %{value}') % { value: value } if %r{\s}.match?(value)
+        raise Puppet::Error, _('Key must not contain whitespace: %{value}') % ({ value: }) if %r{\s}.match?(value)
       end
     end
 
@@ -144,7 +144,7 @@ module Puppet
         unless value == :absent || value =~ %r{^[-a-z0-9A-Z_]+(?:=\".*?\")?$}
           raise(
             Puppet::Error,
-            _("Option %{value} is not valid. A single option must either be of the form 'option' or 'option=\"value\"'. Multiple options must be provided as an array") % { value: value },
+            _("Option %{value} is not valid. A single option must either be of the form 'option' or 'option=\"value\"'. Multiple options must be provided as an array") % { value: },
           )
         end
       end
@@ -171,7 +171,7 @@ module Puppet
             sk-ecdsa-sha2-nistp256@openssh.com|sk-ssh-ed25519@openssh.com|
             ssh-rsa-cert-v01@openssh.com|ssh-ed25519-cert-v01@openssh.com|
             ssh-dss-cert-v01@openssh.com|ecdsa-sha2-nistp256-cert-v01@openssh.com|
-            ecdsa-sha2-nistp384-cert-v01@openssh.com|ecdsa-sha2-nistp521-cert-v01@openssh.com)\s+([^ ]+)\s*(.*)$}x.freeze
+            ecdsa-sha2-nistp384-cert-v01@openssh.com|ecdsa-sha2-nistp521-cert-v01@openssh.com)\s+([^ ]+)\s*(.*)$}x
     def self.keyline_regex
       REGEX
     end
