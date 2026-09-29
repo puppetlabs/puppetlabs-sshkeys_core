@@ -5,11 +5,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased]
+## [v3.1.0](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v3.1.0) - 2026-09-29
 
-### Added
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-sshkeys_core/compare/v3.0.2...v3.1.0)
 
-- (PA-9117) Add support for Puppet 9
+### Other
+
+- (PA-9117) Add Puppet 9 support [#119](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/119) ([tvpartytonight](https://github.com/tvpartytonight))
 
 ## [v3.0.2](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v3.0.2) - 2026-07-17
 
@@ -17,7 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Other
 
-- (PA-8911) Reject embedded whitespace in sshkey key [#1](https://github.com/puppetlabs/puppetlabs-sshkeys_core-private/pull/1) ([mhashizume](https://github.com/mhashizume))
+- (PA-8446) Inherit secrets in nightly tests [#116](https://github.com/puppetlabs/puppetlabs-sshkeys_core/pull/116) ([mhashizume](https://github.com/mhashizume))
 
 ## [v3.0.1](https://github.com/puppetlabs/puppetlabs-sshkeys_core/tree/v3.0.1) - 2025-11-26
 
