@@ -195,4 +195,78 @@ describe Puppet::Type.type(:sshkey).provider(:parsed), unless: Puppet.features.m
       resource_app.main
     end
   end
+
+  describe 'marker functionality' do
+    let(:provider_class) { described_class }
+    let(:type) { Puppet::Type.type(:sshkey) }
+    let(:sample_key) { 'AAAAB3NzaC1yc2EAAAABIwAAAQEAzwHhxXvIrtfIwrudFqc8yQcIfMudrgpnuh1F3AV6d2BrLgu/yQE7W5UyJMUjfj427sQudRwKW45O0Jsnr33F4mUw+GIMlAAmp9g24/OcrTiB8ZUKIjoPy/cO4coxGi8/NECtRzpD/ZUPFh6OEpyOwJPMb7/EC2Az6Otw4StHdXUYw22zHazBcPFnv6zCgPx1hA7QlQDWTu4YcL0WmTYQCtMUb3FUqrcFtzGDD0ytosgwSd+JyN5vj5UwIABjnNOHPZ62EY1OFixnfqX/+dUwrFSs5tPgBF/KkC6R7tmbUfnBON6RrGEmu+ajOTOLy23qUZB4CQ53V7nyAWhzqSK+hw==' } # rubocop:disable Layout/LineLength
+
+    describe 'round-trip conversion' do
+      it 'parses and regenerates a cert-authority entry' do
+        line = "@cert-authority *.example.com ssh-rsa #{sample_key}"
+
+        parsed = provider_class.parse_line(line)
+        expect(parsed[:marker]).to eq(:'cert-authority')
+        expect(parsed[:name]).to eq('*.example.com')
+        expect(parsed[:type]).to eq('ssh-rsa')
+        expect(parsed[:key]).to eq(sample_key)
+
+        expect(provider_class.to_line(parsed)).to eq(line)
+      end
+
+      it 'parses and regenerates a cert-authority entry with host aliases' do
+        line = "@cert-authority *.example.com,*.test.com ssh-rsa #{sample_key}"
+
+        parsed = provider_class.parse_line(line)
+        expect(parsed[:marker]).to eq(:'cert-authority')
+        expect(parsed[:name]).to eq('*.example.com')
+        expect(parsed[:host_aliases]).to eq(['*.test.com'])
+        expect(parsed[:type]).to eq('ssh-rsa')
+
+        expect(provider_class.to_line(parsed)).to eq(line)
+      end
+
+      it 'parses and regenerates a revoked entry' do
+        line = "@revoked bad.example.com ssh-rsa #{sample_key}"
+
+        parsed = provider_class.parse_line(line)
+        expect(parsed[:marker]).to eq(:revoked)
+        expect(parsed[:name]).to eq('bad.example.com')
+        expect(parsed[:type]).to eq('ssh-rsa')
+
+        expect(provider_class.to_line(parsed)).to eq(line)
+      end
+
+      it 'emits a plain line when marker is :absent' do
+        record = {
+          record_type: :parsed,
+          name: '*.example.com',
+          type: 'ssh-rsa',
+          key: sample_key,
+          marker: :absent,
+        }
+        expect(provider_class.to_line(record)).to eq("*.example.com ssh-rsa #{sample_key}")
+      end
+    end
+
+    describe 'resource creation' do
+      it 'creates a cert-authority sshkey resource' do
+        expect {
+          type.new(name: '*.example.com', type: 'ssh-rsa', marker: 'cert-authority', key: sample_key)
+        }.not_to raise_error
+      end
+
+      it 'creates a revoked sshkey resource' do
+        expect {
+          type.new(name: 'bad.example.com', type: 'ssh-rsa', marker: 'revoked', key: sample_key)
+        }.not_to raise_error
+      end
+
+      it 'still resolves keytype aliases when a marker is set' do
+        resource = type.new(name: '*.example.com', type: :rsa, marker: :'cert-authority', key: sample_key)
+        expect(resource[:type]).to eq(:'ssh-rsa')
+        expect(resource[:marker]).to eq(:'cert-authority')
+      end
+    end
+  end
 end

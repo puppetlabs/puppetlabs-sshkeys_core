@@ -51,6 +51,15 @@ module Puppet
       aliasvalue(:'ed25519-sk', :'sk-ssh-ed25519@openssh.com')
     end
 
+    newproperty(:marker) do
+      desc "Optional marker for the `known_hosts` entry. Valid values are
+        `cert-authority` (the key is a CA that signs host certificates for the
+        listed patterns) and `revoked` (the key is explicitly denied). See the
+        `SSH_KNOWN_HOSTS FILE FORMAT` section of sshd(8)."
+
+      newvalues :'cert-authority', :revoked
+    end
+
     newproperty(:key) do
       desc "The key itself; generally a long string of unencoded characters. The `key`
         attribute may not contain any whitespace, including embedded newlines.

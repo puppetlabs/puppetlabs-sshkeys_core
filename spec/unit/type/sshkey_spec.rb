@@ -13,7 +13,7 @@ describe Puppet::Type.type(:sshkey) do
       end
     end
 
-    [:host_aliases, :ensure, :key].each do |property|
+    [:host_aliases, :ensure, :key, :marker].each do |property|
       it "has a #{property} property" do
         expect(described_class.attrtype(property)).to eq :property
       end
@@ -54,6 +54,24 @@ describe Puppet::Type.type(:sshkey) do
     it 'aliases :ed25519-sk to :ssh-dss' do
       key = described_class.new(name: 'foo', type: :'ed25519-sk')
       expect(key.parameter(:type).value).to eq :'sk-ssh-ed25519@openssh.com'
+    end
+
+    [:'cert-authority', :revoked].each do |mark|
+      it "accepts marker => #{mark}" do
+        key = described_class.new(name: 'foo', type: :'ssh-rsa', marker: mark, key: 'AAA')
+        expect(key[:marker]).to eq(mark)
+      end
+    end
+
+    it 'rejects an unknown marker value' do
+      expect {
+        described_class.new(name: 'foo', type: :'ssh-rsa', marker: :bogus, key: 'AAA')
+      }.to raise_error(Puppet::Error, %r{Invalid value.*bogus})
+    end
+
+    it 'leaves marker unset by default' do
+      key = described_class.new(name: 'foo', type: :'ssh-rsa', key: 'AAA')
+      expect(key[:marker]).to be_nil
     end
 
     it "doesn't support values other than ssh-dss, ssh-rsa, dsa, rsa for type" do

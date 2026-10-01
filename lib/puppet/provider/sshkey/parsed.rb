@@ -12,14 +12,38 @@ Puppet::Type.type(:sshkey).provide(
 
   record_line :parsed, fields: ['name', 'type', 'key'],
                        post_parse: proc { |hash|
-                                     names = hash[:name].split(',', -1)
-                                     hash[:name] = names.shift
-                                     hash[:host_aliases] = names
+                                     # record_line takes a fixed field count; peel any leading @cert-authority/@revoked marker off by hand.
+                                     if hash[:name] && hash[:name].start_with?('@')
+                                       marker = hash[:name].delete_prefix('@')
+                                       key_field = hash[:key].is_a?(String) ? hash[:key] : ''
+                                       keytype, actual_key = key_field.split(%r{\s+}, 2)
+                                       if ['cert-authority', 'revoked'].include?(marker) && keytype && actual_key
+                                         hash[:marker] = marker.to_sym
+                                         hash[:name] = hash[:type]
+                                         hash[:type] = keytype
+                                         hash[:key] = actual_key
+                                       else
+                                         Puppet.warning(_('Ignoring malformed known_hosts entry starting with %{marker}') % ({ marker: hash[:name] }))
+                                       end
+                                     end
+
+                                     # marker isn't a record_line field, so ParsedFile#mk_resource_methods will fall back to the desired value unless we set it explicitly.
+                                     hash[:marker] ||= :absent
+
+                                     if hash[:name]
+                                       names = hash[:name].split(',', -1)
+                                       hash[:name] = names.shift
+                                       hash[:host_aliases] = names
+                                     end
                                    },
                        pre_gen: proc { |hash|
                                   if hash[:host_aliases]
                                     hash[:name] = [hash[:name], hash[:host_aliases]].flatten.join(',')
                                     hash.delete(:host_aliases)
+                                  end
+                                  if hash[:marker] && hash[:marker] != :absent
+                                    hash[:name] = "@#{hash[:marker]} #{hash[:name]}"
+                                    hash.delete(:marker)
                                   end
                                 }
 

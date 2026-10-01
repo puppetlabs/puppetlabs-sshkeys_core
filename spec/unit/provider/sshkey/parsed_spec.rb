@@ -38,6 +38,45 @@ describe 'sshkey parsed provider' do
     expect(subject.parse_line('test ssh-rsa ' + key)[:host_aliases]).to eq([])
   end
 
+  it 'parses cert-authority entries into a marker with a clean type' do
+    result = subject.parse_line('@cert-authority *.example.com ssh-rsa ' + key)
+    expect(result[:marker]).to eq(:'cert-authority')
+    expect(result[:name]).to eq('*.example.com')
+    expect(result[:type]).to eq('ssh-rsa')
+    expect(result[:key]).to eq(key)
+  end
+
+  it 'parses cert-authority entries with host aliases' do
+    result = subject.parse_line('@cert-authority *.example.com,*.test.com ssh-rsa ' + key)
+    expect(result[:marker]).to eq(:'cert-authority')
+    expect(result[:name]).to eq('*.example.com')
+    expect(result[:host_aliases]).to eq(['*.test.com'])
+    expect(result[:type]).to eq('ssh-rsa')
+  end
+
+  it 'parses revoked entries' do
+    result = subject.parse_line('@revoked *.example.com ssh-rsa ' + key)
+    expect(result[:marker]).to eq(:revoked)
+    expect(result[:name]).to eq('*.example.com')
+    expect(result[:type]).to eq('ssh-rsa')
+    expect(result[:key]).to eq(key)
+  end
+
+  it 'defaults marker to :absent on plain entries so Puppet detects marker transitions' do
+    expect(subject.parse_line('test ssh-rsa ' + key)[:marker]).to eq(:absent)
+  end
+
+  it 'warns on a malformed marker line and does not set a marker' do
+    expect(Puppet).to receive(:warning).with(%r{malformed known_hosts entry}i)
+    result = subject.parse_line('@cert-authority *.example.com')
+    expect(result[:marker]).to eq(:absent)
+  end
+
+  it 'warns on an unknown @-prefixed marker' do
+    expect(Puppet).to receive(:warning).with(%r{malformed known_hosts entry}i)
+    subject.parse_line('@bogus *.example.com ssh-rsa ' + key)
+  end
+
   context 'with the sample file' do
     ['sample', 'sample_with_blank_lines'].each do |sample_file|
       let(:fixture) { my_fixture(sample_file) }

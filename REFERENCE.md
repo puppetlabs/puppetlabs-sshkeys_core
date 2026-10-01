@@ -190,6 +190,15 @@ other attributes):
 
 * Key headers, such as 'ssh-rsa' --- put these in the `type` attribute.
 
+##### `marker`
+
+Valid values: `cert-authority`, `revoked`
+
+Optional marker for the `known_hosts` entry. Valid values are
+`cert-authority` (the key is a CA that signs host certificates for the
+listed patterns) and `revoked` (the key is explicitly denied). See the
+`SSH_KNOWN_HOSTS FILE FORMAT` section of sshd(8).
+
 ##### `target`
 
 The file in which to store the ssh key.  Only used by
