@@ -64,6 +64,7 @@ Puppet::Type.type(:ssh_authorized_key).provide(
       path = path.dirname
     end
     Puppet.debug('Path trusted, writing the file as the current user')
+    return true
   end
 
   def flush
